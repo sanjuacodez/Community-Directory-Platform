@@ -374,8 +374,8 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Create Job model
-* [ ] Create job CRUD APIs
+* [x] Create Job model
+* [x] Create job CRUD APIs
 
 ### Acceptance Criteria
 
@@ -385,9 +385,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Job listing page
-* [ ] Job details page
-* [ ] Admin job management page
+* [x] Job listing page
+* [x] Job details page
+* [x] Admin job management page
 
 ### Acceptance Criteria
 
@@ -399,8 +399,8 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Create Obituary model
-* [ ] Create obituary CRUD APIs
+* [x] Create Obituary model
+* [x] Create obituary CRUD APIs
 
 ### Acceptance Criteria
 
@@ -410,9 +410,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Obituary listing page
-* [ ] Obituary details page
-* [ ] Admin obituary management page
+* [x] Obituary listing page
+* [x] Obituary details page
+* [x] Admin obituary management page
 
 ### Acceptance Criteria
 

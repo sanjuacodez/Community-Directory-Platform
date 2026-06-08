@@ -1,0 +1,3 @@
+import { IsString, IsOptional, IsUUID, IsDateString, MaxLength } from 'class-validator';
+export class CreateJobDto { @IsUUID() communityId: string; @IsString() @MaxLength(200) title: string; @IsOptional() @IsString() company?: string; @IsOptional() @IsString() location?: string; @IsOptional() @IsString() description?: string; @IsOptional() @IsString() contactInformation?: string; @IsOptional() @IsDateString() expiryDate?: string; }
+export class UpdateJobDto { @IsOptional() @IsString() @MaxLength(200) title?: string; @IsOptional() @IsString() company?: string; @IsOptional() @IsString() location?: string; @IsOptional() @IsString() description?: string; @IsOptional() @IsString() contactInformation?: string; @IsOptional() @IsDateString() expiryDate?: string; }
