@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { AuthProvider } from '@/components/auth-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -43,7 +44,9 @@ export default function RootLayout({
             </div>
           </div>
         </nav>
-        <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+        <main className="mx-auto max-w-5xl px-4 py-8">
+          <AuthProvider>{children}</AuthProvider>
+        </main>
       </body>
     </html>
   );

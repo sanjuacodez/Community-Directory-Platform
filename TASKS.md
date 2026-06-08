@@ -510,11 +510,11 @@ Relationship Types:
 
 ## Supabase Project Setup
 
-* [ ] Create Supabase project (Free Tier)
-* [ ] Export current Prisma schema → PostgreSQL SQL
-* [ ] Push schema to Supabase
-* [ ] Enable Supabase Auth (email/password provider)
-* [ ] Configure environment variables for Supabase
+* [x] Create Supabase project (Free Tier)
+* [x] Export current Prisma schema → PostgreSQL SQL
+* [x] Push schema to Supabase
+* [x] Enable Supabase Auth (email/password provider)
+* [x] Configure environment variables for Supabase
 
 ### Acceptance Criteria
 
@@ -526,14 +526,14 @@ Relationship Types:
 
 ## Frontend Migration
 
-* [ ] Install @supabase/supabase-js in frontend
-* [ ] Create Supabase client module (src/lib/supabase.ts)
-* [ ] Replace api.ts fetch calls with Supabase SDK queries
-* [ ] Replace Zustand auth store with Supabase Auth methods
-* [ ] Update login/register forms to use Supabase Auth
-* [ ] Update member search/filters to use Supabase queries
-* [ ] Update all 21 pages for Supabase compatibility
-* [ ] Update environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
+* [x] Install @supabase/supabase-js in frontend
+* [x] Create Supabase client module (src/lib/supabase.ts)
+* [x] Replace api.ts fetch calls with Supabase SDK queries
+* [x] Replace Zustand auth store with Supabase Auth methods
+* [x] Update login/register forms to use Supabase Auth
+* [x] Update member search/filters to use Supabase queries
+* [x] Update all 21 pages for Supabase compatibility
+* [x] Update environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
 ### Acceptance Criteria
 
