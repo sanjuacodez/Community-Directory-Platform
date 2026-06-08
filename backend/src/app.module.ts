@@ -16,6 +16,7 @@ import { JobsModule } from './jobs/jobs.module';
 import { ObituariesModule } from './obituaries/obituaries.module';
 import { ReportsModule } from './reports/reports.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     ObituariesModule,
     ReportsModule,
     AuditLogsModule,
+    ExportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

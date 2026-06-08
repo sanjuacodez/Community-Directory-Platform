@@ -466,9 +466,9 @@ Relationship Types:
 
 ## Backend
 
-* [ ] CSV export
+* [x] CSV export
 * [ ] Excel export
-* [ ] Member import
+* [x] Member import
 
 ### Acceptance Criteria
 
@@ -480,25 +480,25 @@ Relationship Types:
 
 ## Security
 
-* [ ] API rate limiting
-* [ ] Input validation
-* [ ] Security headers
+* [x] API rate limiting
+* [x] Input validation
+* [x] Security headers
 
 ---
 
 ## Performance
 
-* [ ] Pagination
-* [ ] Database indexes
-* [ ] Query optimization
+* [x] Pagination
+* [x] Database indexes
+* [x] Query optimization
 
 ---
 
 ## Testing
 
-* [ ] Unit tests
-* [ ] Integration tests
-* [ ] Manual QA
+* [x] Unit tests
+* [x] Integration tests
+* [x] Manual QA
 
 ### Acceptance Criteria
 
