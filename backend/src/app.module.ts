@@ -14,6 +14,7 @@ import { EventsModule } from './events/events.module';
 import { BusinessesModule } from './businesses/businesses.module';
 import { JobsModule } from './jobs/jobs.module';
 import { ObituariesModule } from './obituaries/obituaries.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { ObituariesModule } from './obituaries/obituaries.module';
     BusinessesModule,
     JobsModule,
     ObituariesModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

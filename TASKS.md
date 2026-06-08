@@ -424,10 +424,10 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Member count statistics
-* [ ] Family count statistics
-* [ ] Blood group statistics
-* [ ] Profession statistics
+* [x] Member count statistics
+* [x] Family count statistics
+* [x] Blood group statistics
+* [x] Profession statistics
 
 ### Acceptance Criteria
 
@@ -437,9 +437,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Admin dashboard
-* [ ] Statistics widgets
-* [ ] Summary cards
+* [x] Admin dashboard
+* [x] Statistics widgets
+* [x] Summary cards
 
 ### Acceptance Criteria
 

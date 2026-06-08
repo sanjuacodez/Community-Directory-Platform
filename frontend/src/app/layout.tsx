@@ -21,6 +21,7 @@ export default function RootLayout({
               Community Directory
             </Link>
             <div className="flex gap-4 text-sm">
+              <Link href="/dashboard" className="hover:text-zinc-600">Dashboard</Link>
               <Link href="/jobs" className="hover:text-zinc-600">Jobs</Link>
               <Link href="/obituaries" className="hover:text-zinc-600">Obituaries</Link>
               <Link href="/businesses" className="hover:text-zinc-600">Businesses</Link>
