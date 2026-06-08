@@ -41,7 +41,7 @@ export default function FamiliesPage() {
         <div key={f.id} className="rounded-xl border border-zinc-200 bg-white p-5">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="font-semibold">{f.name}</h2>
+              <Link href={`/families/${f.id}`} className="font-semibold hover:text-zinc-600">{f.name}</Link>
               <p className="text-sm text-zinc-500">{f.house_name && `${f.house_name} · `}{f.community?.name}</p>
               <p className="text-xs text-zinc-400 mt-1">{f.members?.[0]?.count ?? 0} member(s) · {f.status === 'active' ? <span className="text-green-600">Active</span> : <span className="text-red-500">{f.status}</span>}</p>
               {f.address && <p className="text-xs text-zinc-400">{f.address}</p>}
