@@ -49,9 +49,9 @@ Current Phase: Setup
 
 ## User Management
 
-* [ ] Create User model
-* [ ] Create Role model
-* [ ] Create UserRole relationship
+* [x] Create User model
+* [x] Create Role model
+* [x] Create UserRole relationship
 
 ### Acceptance Criteria
 
@@ -62,11 +62,11 @@ Current Phase: Setup
 
 ## Authentication
 
-* [ ] Implement login endpoint
+* [x] Implement login endpoint
 * [ ] Implement logout endpoint
-* [ ] Implement JWT generation
-* [ ] Implement refresh tokens
-* [ ] Implement password hashing
+* [x] Implement JWT generation
+* [x] Implement refresh tokens
+* [x] Implement password hashing
 
 ### Acceptance Criteria
 
@@ -77,9 +77,9 @@ Current Phase: Setup
 
 ## Authorization
 
-* [ ] Create RBAC guards
-* [ ] Create Super Admin role
-* [ ] Create Family Admin role
+* [x] Create RBAC guards
+* [x] Create Super Admin role
+* [x] Create Family Admin role
 
 ### Acceptance Criteria
 
