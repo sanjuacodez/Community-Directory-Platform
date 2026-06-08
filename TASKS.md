@@ -105,9 +105,9 @@ Current Phase: Phase 2
 
 ## Database
 
-* [ ] Create Family model
-* [ ] Add Community relationship
-* [ ] Add Family Admin relationship
+* [x] Create Family model
+* [x] Add Community relationship
+* [x] Add Family Admin relationship
 
 ### Acceptance Criteria
 
@@ -117,11 +117,11 @@ Current Phase: Phase 2
 
 ## APIs
 
-* [ ] Create family create API
-* [ ] Create family update API
-* [ ] Create family list API
-* [ ] Create family detail API
-* [ ] Create family archive API
+* [x] Create family create API
+* [x] Create family update API
+* [x] Create family list API
+* [x] Create family detail API
+* [x] Create family archive API
 
 ### Acceptance Criteria
 
@@ -131,9 +131,9 @@ Current Phase: Phase 2
 
 ## Frontend
 
-* [ ] Family list page
-* [ ] Family create page
-* [ ] Family edit page
+* [x] Family list page
+* [x] Family create page
+* [x] Family edit page
 
 ### Acceptance Criteria
 

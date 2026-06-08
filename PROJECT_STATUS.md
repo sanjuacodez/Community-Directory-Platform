@@ -2,48 +2,42 @@
 
 ## Current Phase
 
-Phase 2 - Community Module (Complete)
+Phase 3 - Family Module (Complete)
 
 ## Completed Tasks
 
 ### Phase 0 - Project Foundation
 
-Completed: 2026-06-08
-
 * Monorepo structure (npm workspaces: frontend, backend, shared)
-* Frontend app scaffolded (Next.js 16, TypeScript, TailwindCSS 4, ESLint)
-* Backend app scaffolded (NestJS 11, TypeScript, ESLint, Prettier)
+* Frontend: Next.js 16, TypeScript, TailwindCSS 4, ESLint
+* Backend: NestJS 11, TypeScript, ESLint, Prettier
 * PostgreSQL 16 via Docker Compose
 * Prisma 6 ORM with full schema (14 tables)
 * Initial migration + seed (super_admin, family_admin, member roles)
-* PrismaModule and PrismaService for NestJS
 
 ### Phase 1 - Authentication & RBAC
 
-Completed: 2026-06-08
-
-* `POST /api/auth/register` — creates user, returns JWT + refresh token
-* `POST /api/auth/login` — validates credentials, returns JWT + refresh token
-* `POST /api/auth/refresh` — exchanges refresh token for new pair
+* Register, login, refresh token endpoints
 * bcrypt password hashing (12 rounds)
-* JWT access tokens (15min) + refresh tokens (7d)
-* Role priority system (super_admin > family_admin > member)
-* JwtAuthGuard (Passport-based bearer token)
-* RolesGuard with `@Roles()` decorator
-* Input validation via class-validator (DTOs)
-* Global ValidationPipe with whitelist + transform
+* JWT access (15min) + refresh (7d) tokens
+* Role priority: super_admin > family_admin > member
+* JwtAuthGuard + RolesGuard with @Roles() decorator
 
 ### Phase 2 - Community Module
 
-Completed: 2026-06-08
+* Full CRUD for communities (super_admin only)
+* List/Get accessible by family_admin
+* Soft delete, slug uniqueness validation
 
-* `POST /api/communities` — create community (super_admin only)
-* `GET /api/communities` — list all non-deleted communities (super_admin, family_admin)
-* `GET /api/communities/:id` — get community with family/member counts
-* `PATCH /api/communities/:id` — update community (super_admin only)
-* `DELETE /api/communities/:id` — soft delete community (super_admin only)
-* Duplicate slug detection (409 Conflict)
-* DTO validation (name, slug required, string length limits)
+### Phase 3 - Family Module
+
+* `POST /api/families` — create family with community link
+* `GET /api/families` — list families (filterable by communityId)
+* `GET /api/families/:id` — detail with members list and count
+* `PATCH /api/families/:id` — update family fields
+* `DELETE /api/families/:id` — soft archive (status: deleted)
+* Access: super_admin, family_admin
+* Frontend: Family list page with community filter, create/edit forms with validation
 
 ---
 
@@ -59,20 +53,31 @@ Completed: 2026-06-08
 | `/api/communities/:id` | GET | super_admin, family_admin | Done |
 | `/api/communities/:id` | PATCH | super_admin | Done |
 | `/api/communities/:id` | DELETE | super_admin | Done |
-
----
-
-## Database Status
-
-Current Tables (14): users, roles, user_roles, communities, families, members, member_relationships, announcements, events, businesses, jobs, obituaries, audit_logs
-
-Seed Data: super_admin, family_admin, member roles
+| `/api/families` | POST | super_admin, family_admin | Done |
+| `/api/families` | GET | super_admin, family_admin | Done |
+| `/api/families/:id` | GET | super_admin, family_admin | Done |
+| `/api/families/:id` | PATCH | super_admin, family_admin | Done |
+| `/api/families/:id` | DELETE | super_admin, family_admin | Done |
 
 ---
 
 ## Frontend Status
 
-Implemented: Scaffolded Next.js app (home page only)
+| Page | Status |
+|------|--------|
+| Home (`/`) | Done |
+| Families List (`/families`) | Done |
+| Create Family (`/families/create`) | Done |
+| Edit Family (`/families/[id]/edit`) | Done |
+
+State Management: Zustand (auth store)
+API Client: Custom fetch wrapper with auth token support
+
+---
+
+## Database Status
+
+14 tables, seed data for 3 roles
 
 ---
 
@@ -84,4 +89,4 @@ None
 
 ## Next Recommended Task
 
-Phase 3 - Family Module: Create Family CRUD APIs
+Phase 4 - Member Module: Create Member CRUD APIs + Frontend
