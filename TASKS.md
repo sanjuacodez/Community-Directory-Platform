@@ -451,10 +451,10 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Create AuditLog model
-* [ ] Log create actions
-* [ ] Log update actions
-* [ ] Log delete actions
+* [x] Create AuditLog model
+* [x] Log create actions
+* [x] Log update actions
+* [x] Log delete actions
 
 ### Acceptance Criteria
 
