@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
 import { ImageUpload } from '@/components/image-upload';
+import { ImageUpload } from '@/components/image-upload';
 
 const BLOOD = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -96,6 +97,10 @@ export default function CreateMemberPage() {
         </div>
 
         <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => setF(p => ({ ...p, profile_image: url }))} />
+
+        <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 text-xs text-blue-700">
+          <strong>Note:</strong> If the member needs to login, ask them to register at <a href="/login" target="_blank" className="underline">the login page</a> with the same email first. Then create their member record here.
+        </div>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div className="flex gap-3"><button type="submit" disabled={loading} className="btn-primary">{loading ? 'Creating...' : 'Create Member'}</button><button type="button" onClick={() => router.back()} className="btn-secondary">Cancel</button></div>

@@ -62,6 +62,14 @@ cd frontend && npm run dev
 - **Password:** `admin123456`
 - **Role:** Super Admin (full access to all features)
 
+### Onboarding Users
+
+Members need a Supabase Auth account to log in. Flow:
+1. New user registers at `/login` with their email + password
+2. Admin creates their member record via `/members/create` using the same email
+3. Admin assigns roles via SQL: `INSERT INTO user_roles (user_id, role_id) SELECT 'USER_UUID', id FROM roles WHERE name = 'family_admin';`
+4. Member can now log in and manage their assigned family/community
+
 The app runs at **http://localhost:3000**. No backend server needed.
 
 ---
