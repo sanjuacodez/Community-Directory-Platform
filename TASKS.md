@@ -31,11 +31,11 @@ Current Phase: Setup
 
 ## Database Setup
 
-* [ ] Install Prisma
-* [ ] Configure PostgreSQL connection
-* [ ] Create initial Prisma schema
-* [ ] Setup migrations
-* [ ] Setup seed mechanism
+* [x] Install Prisma
+* [x] Configure PostgreSQL connection
+* [x] Create initial Prisma schema
+* [x] Setup migrations
+* [x] Setup seed mechanism
 
 ### Acceptance Criteria
 

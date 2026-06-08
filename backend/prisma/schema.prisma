@@ -1,0 +1,248 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EntityStatus {
+  active
+  inactive
+  archived
+  deleted
+}
+
+enum Visibility {
+  public
+  community_only
+  family_only
+  private
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+enum RelationshipType {
+  father
+  mother
+  spouse
+  child
+}
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  passwordHash String       @map("password_hash")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  userRoles    UserRole[]
+
+  @@map("users")
+}
+
+model Role {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  userRoles UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  roleId    String   @map("role_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_roles")
+}
+
+model Community {
+  id        String       @id @default(uuid())
+  name      String
+  slug      String       @unique
+  logo      String?
+  status    EntityStatus @default(active)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  families      Family[]
+  members       Member[]
+  announcements Announcement[]
+  events        Event[]
+  businesses    Business[]
+  jobs          Job[]
+  obituaries    Obituary[]
+
+  @@map("communities")
+}
+
+model Family {
+  id           String       @id @default(uuid())
+  communityId  String       @map("community_id")
+  name         String
+  houseName    String?      @map("house_name")
+  address      String?
+  adminId      String?      @map("family_admin_id")
+  status       EntityStatus @default(active)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  members   Member[]
+
+  @@map("families")
+}
+
+model Member {
+  id            String       @id @default(uuid())
+  communityId   String       @map("community_id")
+  familyId      String       @map("family_id")
+  firstName     String       @map("first_name")
+  lastName      String       @map("last_name")
+  gender        Gender
+  dateOfBirth   DateTime?    @map("date_of_birth")
+  bloodGroup    String?      @map("blood_group")
+  email         String?
+  phone         String?
+  profession    String?
+  organization  String?
+  education     String?
+  location      String?
+  profileImage  String?      @map("profile_image")
+  isDeceased    Boolean      @default(false) @map("is_deceased")
+  visibility    Visibility   @default(community_only)
+  status        EntityStatus @default(active)
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+
+  community       Community             @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  family          Family                @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  relationshipsAs MemberRelationship[]  @relation("MemberRelationships")
+  relatedToAs     MemberRelationship[]  @relation("RelatedMemberRelationships")
+  obituaries      Obituary[]
+
+  @@map("members")
+}
+
+model MemberRelationship {
+  id               String           @id @default(uuid())
+  memberId         String           @map("member_id")
+  relatedMemberId  String           @map("related_member_id")
+  relationshipType RelationshipType @map("relationship_type")
+  createdAt        DateTime         @default(now()) @map("created_at")
+
+  member        Member @relation("MemberRelationships", fields: [memberId], references: [id], onDelete: Cascade)
+  relatedMember Member @relation("RelatedMemberRelationships", fields: [relatedMemberId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, relatedMemberId, relationshipType])
+  @@map("member_relationships")
+}
+
+model Announcement {
+  id          String       @id @default(uuid())
+  communityId String       @map("community_id")
+  title       String
+  content     String
+  image       String?
+  publishedAt DateTime?    @map("published_at")
+  status      EntityStatus @default(active)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@map("announcements")
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  communityId String   @map("community_id")
+  title       String
+  description String?
+  eventDate   DateTime @map("event_date")
+  location    String?
+  image       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@map("events")
+}
+
+model Business {
+  id            String @id @default(uuid())
+  communityId   String @map("community_id")
+  ownerMemberId String @map("owner_member_id")
+  businessName  String @map("business_name")
+  category      String?
+  description   String?
+  phone         String?
+  email         String?
+  location      String?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@map("businesses")
+}
+
+model Job {
+  id                 String   @id @default(uuid())
+  communityId        String   @map("community_id")
+  title              String
+  company            String?
+  location           String?
+  description        String?
+  contactInformation String?  @map("contact_information")
+  expiryDate         DateTime? @map("expiry_date")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+
+  @@map("jobs")
+}
+
+model Obituary {
+  id          String   @id @default(uuid())
+  communityId String   @map("community_id")
+  memberId    String   @map("member_id")
+  content     String?
+  dateOfDeath DateTime @map("date_of_death")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  community Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  member    Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@map("obituaries")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  action     String
+  changes    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}

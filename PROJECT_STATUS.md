@@ -6,10 +6,9 @@ Phase 0 - Project Foundation (Complete)
 
 ## Completed Tasks
 
-### Repository Setup
+### Repository Setup (Phase 0)
 
-Completed:
-2026-06-08
+Completed: 2026-06-08
 
 * Monorepo structure (npm workspaces: frontend, backend, shared)
 * Frontend app scaffolded (Next.js 16, TypeScript, TailwindCSS 4, ESLint)
@@ -20,42 +19,40 @@ Completed:
 * `typecheck` scripts across all workspaces
 * `.gitignore` configured
 
-Acceptance Criteria Met:
+### Database Setup (Phase 0)
 
-* Frontend builds successfully (`next build`)
-* Backend builds successfully (`nest build`)
-* All typecheck passes (`tsc --noEmit`)
-* Environment variables load correctly
+Completed: 2026-06-08
 
----
-
-## Pending Tasks
-
-### Phase 0 - Database Setup
-
-* Install Prisma
-* Configure PostgreSQL connection
-* Create initial Prisma schema
-* Setup migrations
-* Setup seed mechanism
-
-### Phase 1 - Authentication & RBAC
-
-* Create User model
-* Create Role model
-* Create UserRole relationship
-* Implement login/logout endpoints
-* Implement JWT + refresh tokens
-* Implement password hashing
-* Create RBAC guards
+* PostgreSQL 16 via Docker Compose
+* Prisma 7 ORM with PG adapter
+* Full schema with 14 tables (users, roles, user_roles, communities, families, members, member_relationships, announcements, events, businesses, jobs, obituaries, audit_logs, _prisma_migrations)
+* Initial migration applied
+* Seed mechanism with role seeding (super_admin, family_admin, member)
+* PrismaModule and PrismaService for NestJS
+* `db:migrate`, `db:seed`, `db:studio` scripts
 
 ---
 
 ## Database Status
 
-Current Tables:
+Current Tables (14):
 
-* None
+* users
+* roles
+* user_roles
+* communities
+* families
+* members
+* member_relationships
+* announcements
+* events
+* businesses
+* jobs
+* obituaries
+* audit_logs
+* _prisma_migrations
+
+Seed Data: super_admin, family_admin, member roles
 
 ---
 
@@ -83,4 +80,4 @@ None
 
 ## Next Recommended Task
 
-Setup PostgreSQL and Prisma.
+Phase 1 - Authentication: Create User model endpoints (register, login, etc.)
