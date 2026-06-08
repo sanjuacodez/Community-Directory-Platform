@@ -298,9 +298,9 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Create Announcement model
-* [ ] Create announcement CRUD APIs
-* [ ] Add image support
+* [x] Create Announcement model
+* [x] Create announcement CRUD APIs
+* [x] Add image support
 
 ### Acceptance Criteria
 
@@ -310,9 +310,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Announcement list page
-* [ ] Announcement details page
-* [ ] Admin management page
+* [x] Announcement list page
+* [x] Announcement details page
+* [x] Admin management page
 
 ### Acceptance Criteria
 

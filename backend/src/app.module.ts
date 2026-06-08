@@ -9,6 +9,7 @@ import { FamiliesModule } from './families/families.module';
 import { MembersModule } from './members/members.module';
 import { MediaModule } from './media/media.module';
 import { RelationshipsModule } from './relationships/relationships.module';
+import { AnnouncementsModule } from './announcements/announcements.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RelationshipsModule } from './relationships/relationships.module';
     MembersModule,
     MediaModule,
     RelationshipsModule,
+    AnnouncementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

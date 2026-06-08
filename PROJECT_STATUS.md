@@ -2,9 +2,18 @@
 
 ## Current Phase
 
-Phase 7 - Search & Directory (Complete)
+Phase 8 - Announcements (Complete)
 
-## Completed Tasks
+## Completed
+
+### Phase 8 - Announcements
+* `POST /api/announcements` — create (super_admin, image support)
+* `GET /api/announcements` — public list
+* `GET /api/announcements/:id` — public detail
+* `PATCH /api/announcements/:id` — update (super_admin)
+* `DELETE /api/announcements/:id` — soft delete (super_admin)
+* Frontend: public list, detail, admin create/edit pages
+* Tests: service (8 tests) + controller (7 tests) = 15 total Tasks
 
 ### Phase 0-5: Foundation through Media Upload
 
