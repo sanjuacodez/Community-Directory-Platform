@@ -24,3 +24,39 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid #d4d4d8;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background: white;
+}
+
+.btn-primary {
+  border-radius: 0.5rem;
+  background: #18181b;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #27272a;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.btn-secondary {
+  border-radius: 0.5rem;
+  border: 1px solid #d4d4d8;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-secondary:hover {
+  background: #fafafa;
+}

@@ -2,91 +2,57 @@
 
 ## Current Phase
 
-Phase 3 - Family Module (Complete)
+Phase 4 - Member Module (Complete)
 
 ## Completed Tasks
 
-### Phase 0 - Project Foundation
+### Phase 0-3: Foundation, Auth, Community, Family
 
-* Monorepo structure (npm workspaces: frontend, backend, shared)
-* Frontend: Next.js 16, TypeScript, TailwindCSS 4, ESLint
-* Backend: NestJS 11, TypeScript, ESLint, Prettier
-* PostgreSQL 16 via Docker Compose
-* Prisma 6 ORM with full schema (14 tables)
-* Initial migration + seed (super_admin, family_admin, member roles)
+* Monorepo, Docker PostgreSQL, Prisma 6 (14 tables)
+* Auth: register, login, refresh with JWT + RBAC
+* Community CRUD (super_admin)
+* Family CRUD (super_admin, family_admin)
 
-### Phase 1 - Authentication & RBAC
+### Phase 4 - Member Module
 
-* Register, login, refresh token endpoints
-* bcrypt password hashing (12 rounds)
-* JWT access (15min) + refresh (7d) tokens
-* Role priority: super_admin > family_admin > member
-* JwtAuthGuard + RolesGuard with @Roles() decorator
-
-### Phase 2 - Community Module
-
-* Full CRUD for communities (super_admin only)
-* List/Get accessible by family_admin
-* Soft delete, slug uniqueness validation
-
-### Phase 3 - Family Module
-
-* `POST /api/families` — create family with community link
-* `GET /api/families` — list families (filterable by communityId)
-* `GET /api/families/:id` — detail with members list and count
-* `PATCH /api/families/:id` — update family fields
-* `DELETE /api/families/:id` — soft archive (status: deleted)
-* Access: super_admin, family_admin
-* Frontend: Family list page with community filter, create/edit forms with validation
+* `POST /api/members` — create member with all fields
+* `GET /api/members` — list with search, bloodGroup, profession, location, communityId, familyId filters
+* `GET /api/members/:id` — full detail with family, community, relationships
+* `PATCH /api/members/:id` — update any field
+* `DELETE /api/members/:id` — soft archive (status: deleted)
+* Access: super_admin, family_admin for write; members can view
+* Frontend: Member list with filters, profile page with relationships, create/edit forms
 
 ---
 
-## API Status
+## API Status (14 endpoints)
 
 | Endpoint | Method | Auth | Status |
 |----------|--------|------|--------|
 | `/api/auth/register` | POST | Public | Done |
 | `/api/auth/login` | POST | Public | Done |
 | `/api/auth/refresh` | POST | Public | Done |
-| `/api/communities` | POST | super_admin | Done |
-| `/api/communities` | GET | super_admin, family_admin | Done |
-| `/api/communities/:id` | GET | super_admin, family_admin | Done |
-| `/api/communities/:id` | PATCH | super_admin | Done |
-| `/api/communities/:id` | DELETE | super_admin | Done |
-| `/api/families` | POST | super_admin, family_admin | Done |
-| `/api/families` | GET | super_admin, family_admin | Done |
-| `/api/families/:id` | GET | super_admin, family_admin | Done |
-| `/api/families/:id` | PATCH | super_admin, family_admin | Done |
-| `/api/families/:id` | DELETE | super_admin, family_admin | Done |
+| `/api/communities` | CRUD | super_admin | Done |
+| `/api/families` | CRUD | admin roles | Done |
+| `/api/members` | CRUD | admin roles | Done |
 
 ---
 
-## Frontend Status
+## Frontend Status (8 pages)
 
-| Page | Status |
-|------|--------|
-| Home (`/`) | Done |
-| Families List (`/families`) | Done |
-| Create Family (`/families/create`) | Done |
-| Edit Family (`/families/[id]/edit`) | Done |
-
-State Management: Zustand (auth store)
-API Client: Custom fetch wrapper with auth token support
-
----
-
-## Database Status
-
-14 tables, seed data for 3 roles
-
----
-
-## Known Issues
-
-None
+| Page | Route | Status |
+|------|-------|--------|
+| Home | `/` | Done |
+| Families List | `/families` | Done |
+| Create Family | `/families/create` | Done |
+| Edit Family | `/families/[id]/edit` | Done |
+| Members List | `/members` | Done |
+| Member Profile | `/members/[id]` | Done |
+| Create Member | `/members/create` | Done |
+| Edit Member | `/members/[id]/edit` | Done |
 
 ---
 
 ## Next Recommended Task
 
-Phase 4 - Member Module: Create Member CRUD APIs + Frontend
+Phase 5 - Media Upload (Cloudflare R2)

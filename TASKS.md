@@ -145,9 +145,9 @@ Current Phase: Phase 2
 
 ## Database
 
-* [ ] Create Member model
-* [ ] Add Family relationship
-* [ ] Add Community relationship
+* [x] Create Member model
+* [x] Add Family relationship
+* [x] Add Community relationship
 
 ### Fields
 
@@ -169,11 +169,11 @@ Current Phase: Phase 2
 
 ## APIs
 
-* [ ] Create member API
-* [ ] Update member API
-* [ ] Get member API
-* [ ] List members API
-* [ ] Archive member API
+* [x] Create member API
+* [x] Update member API
+* [x] Get member API
+* [x] List members API
+* [x] Archive member API
 
 ### Acceptance Criteria
 
@@ -183,10 +183,10 @@ Current Phase: Phase 2
 
 ## Frontend
 
-* [ ] Member list page
-* [ ] Member profile page
-* [ ] Member create form
-* [ ] Member edit form
+* [x] Member list page
+* [x] Member profile page
+* [x] Member create form
+* [x] Member edit form
 
 ### Acceptance Criteria
 

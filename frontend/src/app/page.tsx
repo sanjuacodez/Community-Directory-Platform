@@ -23,10 +23,15 @@ export default function Home() {
             View and manage family records
           </p>
         </Link>
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 opacity-50">
+        <Link
+          href="/members"
+          className="rounded-xl border border-zinc-200 bg-white p-6 hover:border-zinc-400 transition-colors"
+        >
           <h2 className="font-semibold">Members</h2>
-          <p className="mt-1 text-sm text-zinc-500">Coming soon</p>
-        </div>
+          <p className="mt-1 text-sm text-zinc-500">
+            Browse and manage member directory
+          </p>
+        </Link>
         <div className="rounded-xl border border-zinc-200 bg-white p-6 opacity-50">
           <h2 className="font-semibold">Directory</h2>
           <p className="mt-1 text-sm text-zinc-500">Coming soon</p>

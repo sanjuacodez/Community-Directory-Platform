@@ -24,6 +24,9 @@ export default function RootLayout({
               <Link href="/families" className="hover:text-zinc-600">
                 Families
               </Link>
+              <Link href="/members" className="hover:text-zinc-600">
+                Members
+              </Link>
             </div>
           </div>
         </nav>

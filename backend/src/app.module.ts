@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CommunitiesModule } from './communities/communities.module';
 import { FamiliesModule } from './families/families.module';
+import { MembersModule } from './members/members.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { FamiliesModule } from './families/families.module';
     UsersModule,
     CommunitiesModule,
     FamiliesModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
