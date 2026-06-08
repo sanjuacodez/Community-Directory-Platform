@@ -7,4 +7,9 @@ dist/
 .DS_Store
 coverage/
 .turbo/
-.wrangler
+.wrangler/
+playwright-report/
+test-results/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
