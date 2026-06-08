@@ -212,7 +212,7 @@ Current Phase: Phase 2
 
 ## Database
 
-* [ ] Create MemberRelationship model
+* [x] Create MemberRelationship model
 
 Fields:
 
@@ -231,10 +231,10 @@ Relationship Types:
 
 ## APIs
 
-* [ ] Create relationship API
-* [ ] Update relationship API
-* [ ] Delete relationship API
-* [ ] Get member relationships API
+* [x] Create relationship API
+* [x] Update relationship API
+* [x] Delete relationship API
+* [x] Get member relationships API
 
 ### Acceptance Criteria
 
@@ -244,9 +244,9 @@ Relationship Types:
 
 ## Relationship Validation
 
-* [ ] Prevent duplicate relationships
-* [ ] Prevent circular references
-* [ ] Validate spouse uniqueness
+* [x] Prevent duplicate relationships
+* [x] Prevent circular references
+* [x] Validate spouse uniqueness
 
 ### Acceptance Criteria
 

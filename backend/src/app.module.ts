@@ -8,6 +8,7 @@ import { CommunitiesModule } from './communities/communities.module';
 import { FamiliesModule } from './families/families.module';
 import { MembersModule } from './members/members.module';
 import { MediaModule } from './media/media.module';
+import { RelationshipsModule } from './relationships/relationships.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MediaModule } from './media/media.module';
     FamiliesModule,
     MembersModule,
     MediaModule,
+    RelationshipsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
