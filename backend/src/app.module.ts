@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { CommunitiesModule } from './communities/communities.module';
 import { FamiliesModule } from './families/families.module';
 import { MembersModule } from './members/members.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MembersModule } from './members/members.module';
     CommunitiesModule,
     FamiliesModule,
     MembersModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

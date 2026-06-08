@@ -198,9 +198,9 @@ Current Phase: Phase 2
 
 ## Storage
 
-* [ ] Configure Cloudflare R2
-* [ ] Create upload service
-* [ ] Create image upload API
+* [x] Configure Cloudflare R2
+* [x] Create upload service
+* [x] Create image upload API
 
 ### Acceptance Criteria
 

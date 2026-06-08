@@ -2,39 +2,43 @@
 
 ## Current Phase
 
-Phase 4 - Member Module (Complete)
+Phase 5 - Media Upload (Complete)
 
 ## Completed Tasks
 
-### Phase 0-3: Foundation, Auth, Community, Family
+### Phase 0-4: Foundation, Auth, Community, Family, Member
 
 * Monorepo, Docker PostgreSQL, Prisma 6 (14 tables)
 * Auth: register, login, refresh with JWT + RBAC
 * Community CRUD (super_admin)
-* Family CRUD (super_admin, family_admin)
+* Family CRUD (admin roles)
+* Member CRUD with search/filters (admin roles + member view)
 
-### Phase 4 - Member Module
+### Phase 5 - Media Upload (Cloudflare R2)
 
-* `POST /api/members` — create member with all fields
-* `GET /api/members` — list with search, bloodGroup, profession, location, communityId, familyId filters
-* `GET /api/members/:id` — full detail with family, community, relationships
-* `PATCH /api/members/:id` — update any field
-* `DELETE /api/members/:id` — soft archive (status: deleted)
-* Access: super_admin, family_admin for write; members can view
-* Frontend: Member list with filters, profile page with relationships, create/edit forms
+* Cloudflare R2 bucket: `community-directory` (APAC region)
+* `POST /api/media/upload` — multipart file upload (5MB limit)
+* `GET /api/media/files/*` — serve files via proxy with caching headers
+* `DELETE /api/media/files/*` — delete files from R2
+* Direct Cloudflare API integration (no S3 SDK needed)
+* Auth-protected upload/delete, public read access via proxy
+* Auto-generated UUID filenames with original extensions
 
 ---
 
-## API Status (14 endpoints)
+## API Status (17 endpoints)
 
 | Endpoint | Method | Auth | Status |
 |----------|--------|------|--------|
 | `/api/auth/register` | POST | Public | Done |
 | `/api/auth/login` | POST | Public | Done |
 | `/api/auth/refresh` | POST | Public | Done |
-| `/api/communities` | CRUD | super_admin | Done |
-| `/api/families` | CRUD | admin roles | Done |
-| `/api/members` | CRUD | admin roles | Done |
+| `/api/communities` | CRUD | admin | Done |
+| `/api/families` | CRUD | admin | Done |
+| `/api/members` | CRUD | admin/member | Done |
+| `/api/media/upload` | POST | admin | Done |
+| `/api/media/files/*` | GET | Public | Done |
+| `/api/media/files/*` | DELETE | admin | Done |
 
 ---
 
@@ -53,6 +57,15 @@ Phase 4 - Member Module (Complete)
 
 ---
 
+## Infrastructure
+
+* Docker: PostgreSQL 16 (port 5432)
+* Cloudflare R2: `community-directory` bucket (APAC)
+* Backend: http://localhost:3001
+* Frontend: http://localhost:3000
+
+---
+
 ## Next Recommended Task
 
-Phase 5 - Media Upload (Cloudflare R2)
+Phase 6 - Relationship Engine
