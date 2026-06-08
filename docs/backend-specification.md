@@ -1,81 +1,76 @@
 # Backend Specification
 
-## Module Structure
+## Current (NestJS)
 
-/auth
-/communities
-/families
-/members
-/relationships
-/announcements
-/events
-/businesses
-/jobs
-/obituaries
-/reports
+39 custom endpoints implemented across 13 modules.
 
-## Authentication
+## Target (Supabase - Post Migration)
 
-Features:
+The NestJS backend is replaced by Supabase's auto-generated REST API. The Prisma schema serves as the source of truth for the database structure.
 
-* Login
-* Logout
-* Refresh Token
-* Password Reset
+### Supabase Auto-API Endpoints (Generated)
 
-Roles:
+All CRUD operations are handled by Supabase's PostgREST engine:
 
-* Super Admin
-* Family Admin
+```
+GET    /rest/v1/communities
+POST   /rest/v1/communities
+PATCH  /rest/v1/communities?id=eq.<id>
+DELETE /rest/v1/communities?id=eq.<id>
 
-## Member APIs
+GET    /rest/v1/families?community_id=eq.<id>
+GET    /rest/v1/members?family_id=eq.<id>&select=*,family(*)
+GET    /rest/v1/announcements?order=published_at.desc
 
-POST /members
+... (same for all 14 tables)
+```
 
-GET /members
+### Custom Endpoints (Edge Functions)
 
-GET /members/:id
+These remain as serverless functions for complex logic:
 
-PATCH /members/:id
+| Endpoint | Purpose |
+|----------|---------|
+| `/functions/v1/relationships` | Validate + create relationship |
+| `/functions/v1/export-members` | CSV export |
+| `/functions/v1/export-families` | CSV export |
+| `/functions/v1/import-members` | Bulk member import |
+| `/functions/v1/dashboard` | Aggregated stats |
 
-DELETE /members/:id
+### Authentication
 
-## Relationship APIs
+Supabase Auth handles:
+* Email/password registration
+* Email verification
+* Password reset
+* JWT issuance (access + refresh)
+* Session management
 
-POST /relationships
+The frontend uses `supabase.auth.signInWithPassword()` and `supabase.auth.signUp()`.
 
-PATCH /relationships/:id
+### Authorization (Row-Level Security)
 
-DELETE /relationships/:id
+Replaces NestJS guards with database-level policies:
 
-GET /members/:id/relationships
+```sql
+-- Public tables: readable by anyone
+CREATE POLICY "Public read" ON announcements FOR SELECT USING (true);
 
-## Search APIs
+-- Members: visible to community members
+CREATE POLICY "Community read" ON members FOR SELECT
+  USING (auth.uid() IS NOT NULL);
 
-GET /members/search
+-- Admin: full access
+CREATE POLICY "Admin all" ON communities FOR ALL
+  USING (EXISTS (SELECT 1 FROM user_roles ur
+    JOIN roles r ON r.id = ur.role_id
+    WHERE ur.user_id = auth.uid() AND r.name = 'super_admin'));
+```
 
-Filters:
+### Security
 
-* name
-* profession
-* blood_group
-* family
-* location
-
-## Reports APIs
-
-GET /reports/dashboard
-
-GET /reports/member-distribution
-
-GET /reports/blood-groups
-
-GET /reports/professions
-
-## Security
-
-* RBAC
-* Input Validation
-* Audit Logging
-* Rate Limiting
-* JWT Authentication
+* JWT via Supabase Auth
+* Row-Level Security on all tables
+* API key required for Edge Functions
+* HTTPS enforced by Supabase
+* CORS configured in Supabase dashboard

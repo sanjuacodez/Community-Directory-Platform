@@ -2,58 +2,54 @@
 
 ## Current Phase
 
-Phase 8 - Announcements (Complete)
+Phase 17 - Supabase Migration (Not Started)
 
-## Completed
+## Completed Phases (0-16)
 
-### Phase 8 - Announcements
-* `POST /api/announcements` — create (super_admin, image support)
-* `GET /api/announcements` — public list
-* `GET /api/announcements/:id` — public detail
-* `PATCH /api/announcements/:id` — update (super_admin)
-* `DELETE /api/announcements/:id` — soft delete (super_admin)
-* Frontend: public list, detail, admin create/edit pages
-* Tests: service (8 tests) + controller (7 tests) = 15 total Tasks
+All 16 original phases complete: Foundation, Auth, Communities, Families, Members, Media, Relationships, Search, Announcements, Events, Businesses, Jobs, Obituaries, Reports, Audit Logs, Import/Export + Production Readiness.
 
-### Phase 0-5: Foundation through Media Upload
+- 39 API endpoints
+- 21 frontend pages
+- 53 unit tests (11 suites)
+- 21 E2E tests (3 suites)
+- Docker PostgreSQL (for development)
 
-* Monorepo, Docker PostgreSQL, Prisma 6 (14 tables)
-* Auth: register, login, refresh JWT + RBAC
-* Community, Family, Member CRUDs
-* Cloudflare R2 media upload proxy
+## Phase 17 - Supabase Migration
 
-### Phase 6 - Relationship Engine
+### Goal
+Replace NestJS backend + Docker PostgreSQL with Supabase (PostgreSQL + Auth + Auto-API). Deploy frontend to Cloudflare Pages. Target: **$0/month operating cost**.
 
-* `POST /api/relationships` — create relationship with validations
-* `GET /api/relationships/member/:id` — get all relationships for a member
-* `PATCH /api/relationships/:id` — update relationship type
-* `DELETE /api/relationships/:id` — hard delete relationship
-* Validations: no self-relationships, same-family requirement, duplicate detection, spouse uniqueness, circular reference prevention
+### Migration Plan
+Detailed plan: `docs/supabase-migration-plan.md`
 
----
+### Key Changes
+- Database: Docker PostgreSQL → Supabase PostgreSQL
+- Auth: Custom JWT → Supabase Auth
+- API: NestJS 39 endpoints → Supabase auto-generated REST
+- Frontend: `api.ts` → Supabase SDK
+- Hosting: localhost/VPS → Cloudflare Pages
+- Storage: Cloudflare R2 (unchanged)
 
-## API Status (21 endpoints)
-
-| Endpoint | Method | Auth | Status |
-|----------|--------|------|--------|
-| `/api/auth/*` | POST | Public | Done |
-| `/api/communities` | CRUD | admin | Done |
-| `/api/families` | CRUD | admin | Done |
-| `/api/members` | CRUD+Search | admin/member | Done |
-| `/api/media/upload` | POST | admin | Done |
-| `/api/media/files/*` | GET/DELETE | public/admin | Done |
-| `/api/relationships` | POST | admin | Done |
-| `/api/relationships/member/:id` | GET | admin | Done |
-| `/api/relationships/:id` | PATCH/DELETE | admin | Done |
+### Estimated Capacity (Free Tier)
+- 50,000 monthly active users
+- 500 MB database
+- 2 GB bandwidth
+- Current usage: ~400 users → well within limits
 
 ---
 
-## Frontend Status (8 pages)
+## Database Status (after migration)
 
-Home, Family list/create/edit, Member list/profile/create/edit
+Supabase PostgreSQL with identical 14-table schema. RLS policies for role-based access.
+
+---
+
+## Known Issues
+
+None
 
 ---
 
 ## Next Recommended Task
 
-Phase 7 - Search & Directory
+Create Supabase project and push schema (Phase 17.1)

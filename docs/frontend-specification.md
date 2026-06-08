@@ -1,86 +1,60 @@
 # Frontend Specification
 
-## Public Pages
+## Stack
+- Next.js 16 (App Router)
+- TypeScript
+- TailwindCSS 4
+- Zustand (auth state)
+- Supabase SDK (database + auth client)
+- Cloudflare R2 (direct file upload)
 
-### Home
+## Page Breakdown
 
-Displays:
+### Public Pages (No Login Required)
 
-* Announcements
-* Upcoming Events
-* Community Statistics
+| Page | Route | Data Source |
+|------|-------|-------------|
+| Home | `/` | Supabase queries |
+| Announcements | `/announcements` | `/rest/v1/announcements` |
+| Announcement Detail | `/announcements/[id]` | `/rest/v1/announcements?id=eq.X` |
+| Events | `/events` | `/rest/v1/events` |
+| Event Detail | `/events/[id]` | `/rest/v1/events?id=eq.X` |
+| Businesses | `/businesses` | `/rest/v1/businesses` |
+| Business Detail | `/businesses/[id]` | `/rest/v1/businesses?id=eq.X` |
+| Jobs | `/jobs` | `/rest/v1/jobs` |
+| Job Detail | `/jobs/[id]` | `/rest/v1/jobs?id=eq.X` |
+| Obituaries | `/obituaries` | `/rest/v1/obituaries` |
+| Obituary Detail | `/obituaries/[id]` | `/rest/v1/obituaries?id=eq.X` |
 
-### Member Directory
+### Authenticated Pages (Login Required)
 
-Search:
+| Page | Route | Data Source |
+|------|-------|-------------|
+| Directory | `/directory` | `/rest/v1/members?select=*,family(*),community(*)` |
+| Members | `/members` | `/rest/v1/members` with filters |
+| Member Profile | `/members/[id]` | `/rest/v1/members?id=eq.X&select=*,relationships(*)` |
+| Member Create | `/members/create` | POST `/rest/v1/members` |
+| Member Edit | `/members/[id]/edit` | PATCH `/rest/v1/members?id=eq.X` |
+| Families | `/families` | `/rest/v1/families?select=*,members(count)` |
+| Family Create | `/families/create` | POST `/rest/v1/families` |
+| Family Edit | `/families/[id]/edit` | PATCH `/rest/v1/families?id=eq.X` |
 
-* Name
-* Profession
-* Blood Group
-* Location
+### Admin Pages (super_admin Only)
 
-Filters:
+| Page | Route | Data Source |
+|------|-------|-------------|
+| Dashboard | `/dashboard` | Edge Function `/functions/v1/dashboard` |
+| Create/Edit (all entities) | Various | POST/PATCH to Supabase REST |
 
-* Family
-* Tags
+## State Management
 
-### Member Profile
+- **Supabase Auth**: Session, user, login/logout
+- **Zustand**: Thin wrapper for auth state (or removed entirely in favor of Supabase Auth helpers)
 
-Sections:
+## File Upload
 
-* Basic Information
-* Contact Information
-* Family Information
-* Relationships
-* Business Information
+Direct to Cloudflare R2 via presigned URLs or Worker proxy. No NestJS intermediary needed.
 
-### Business Directory
+## Responsive Design
 
-List + Detail View
-
-### Job Board
-
-List + Detail View
-
-### Obituary
-
-List + Detail View
-
-### Events
-
-List + Detail View
-
-## Family Admin
-
-Dashboard
-
-Family Members
-
-Relationship Management
-
-Profile Updates
-
-## Super Admin
-
-Dashboard
-
-Family Management
-
-Announcement Management
-
-Event Management
-
-Business Management
-
-Job Management
-
-Reports
-
-Audit Logs
-
-## UI Principles
-
-* Clean
-* Fast
-* Mobile Responsive
-* Accessibility Friendly
+21 pages, all mobile-responsive via TailwindCSS. Tested with Playwright on Desktop Chrome, iPhone 13, iPad Pro 11.

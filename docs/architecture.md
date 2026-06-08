@@ -1,70 +1,72 @@
 # Technical Architecture
 
-## Frontend
+## Target Stack (Phase 17 Migration)
 
-Framework: Next.js 15
+### Frontend
+
+Framework: Next.js 16
 
 Language: TypeScript
 
 UI:
-
-* TailwindCSS
-* shadcn/ui
+* TailwindCSS 4
 
 State Management:
+* Zustand (auth state)
 
-* TanStack Query
-* Zustand
+API Client:
+* Supabase SDK (`@supabase/supabase-js`)
 
-## Backend
+Hosting:
+* Cloudflare Pages
 
-Framework:
+### Backend (Serverless)
 
-* NestJS
-
-Language:
-
-* TypeScript
+Database:
+* Supabase PostgreSQL (Free Tier — 500 MB)
 
 Authentication:
+* Supabase Auth (email/password, JWT)
 
-* JWT
-* Refresh Tokens
+API:
+* Supabase Auto-Generated REST API
+* Supabase Edge Functions (custom logic)
 
-## Database
+Authorization:
+* Supabase Row-Level Security (RLS) policies
 
-PostgreSQL
+### File Storage
 
-ORM:
+Cloudflare R2 (10 GB free)
 
-* Prisma
+### Legacy (To Be Deprecated)
 
-## File Storage
+* NestJS 11 backend
+* Docker PostgreSQL
+* Custom JWT + bcrypt auth
+* Prisma 6 ORM (schema preserved for reference)
 
-Cloudflare R2
-
-## Search
-
-PostgreSQL Full Text Search
+---
 
 ## Deployment
 
-Frontend:
-Cloudflare Pages
+| Component | Service | Cost |
+|-----------|---------|------|
+| Frontend | Cloudflare Pages | Free |
+| Database | Supabase | Free |
+| Auth | Supabase Auth | Free |
+| Storage | Cloudflare R2 | Free |
+| Custom Logic | Supabase Edge Functions | 2M/month free |
+| **Total Monthly** | | **$0** |
 
-Backend:
-Hetzner VPS/localhost
-
-Database:
-PostgreSQL
-
-Storage:
-Cloudflare R2
+---
 
 ## Design Principles
 
 * Mobile Responsive
-* API First
+* API First (Supabase REST)
 * Multi Community Ready
 * Modular Architecture
 * Role Based Access Control
+* Serverless First
+* Zero Infrastructure

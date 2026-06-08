@@ -4,7 +4,7 @@
 
 ## Project Status
 
-Current Phase: Phase 2
+Current Phase: Phase 17
 
 ---
 
@@ -506,6 +506,97 @@ Relationship Types:
 
 ---
 
+# Phase 17 - Supabase Migration
+
+## Supabase Project Setup
+
+* [ ] Create Supabase project (Free Tier)
+* [ ] Export current Prisma schema → PostgreSQL SQL
+* [ ] Push schema to Supabase
+* [ ] Enable Supabase Auth (email/password provider)
+* [ ] Configure environment variables for Supabase
+
+### Acceptance Criteria
+
+* Supabase project accessible via API
+* All 14 tables created in Supabase
+* Email/password auth enabled
+
+---
+
+## Frontend Migration
+
+* [ ] Install @supabase/supabase-js in frontend
+* [ ] Create Supabase client module (src/lib/supabase.ts)
+* [ ] Replace api.ts fetch calls with Supabase SDK queries
+* [ ] Replace Zustand auth store with Supabase Auth methods
+* [ ] Update login/register forms to use Supabase Auth
+* [ ] Update member search/filters to use Supabase queries
+* [ ] Update all 21 pages for Supabase compatibility
+* [ ] Update environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
+
+### Acceptance Criteria
+
+* All 21 frontend pages load against Supabase
+* Login/register works with Supabase Auth
+* CRUD operations work without NestJS
+* Zero backend servers running
+
+---
+
+## Custom Logic Migration
+
+* [ ] Move relationship validation → Supabase Edge Function
+* [ ] Move CSV member export → Supabase Edge Function
+* [ ] Move CSV family export → Supabase Edge Function
+* [ ] Move CSV member import → Supabase Edge Function
+* [ ] Move dashboard reports → Direct Supabase queries
+* [ ] Move audit logging → Supabase database triggers
+* [ ] Keep Cloudflare R2 for file storage (direct upload from frontend)
+
+### Acceptance Criteria
+
+* Relationship validation works (duplicate, circular, spouse uniqueness)
+* CSV export/import functional
+* Dashboard stats load from Supabase
+* R2 uploads continue to work
+
+---
+
+## Security & RLS
+
+* [ ] Public tables RLS: announcements, events, businesses, jobs, obituaries
+* [ ] Authenticated RLS: members, families read by community
+* [ ] Admin RLS: super_admin full access
+* [ ] Profile image upload RLS: owner-only write
+* [ ] Test RLS policies with different roles
+
+### Acceptance Criteria
+
+* Unauthenticated users can only see public tables
+* Members can only see their community data
+* Admins have full CRUD access
+
+---
+
+## Testing & Cleanup
+
+* [ ] Run all 53 unit tests against Supabase (adapt as needed)
+* [ ] Run all 21 E2E tests with Supabase backend
+* [ ] Typecheck passes across all workspaces
+* [ ] Remove NestJS backend from monorepo (optional, can archive)
+* [ ] Remove docker-compose.yml (optional, keep as fallback)
+* [ ] Update README with new Supabase setup instructions
+* [ ] Update all docs/ files for new architecture
+
+### Acceptance Criteria
+
+* All tests pass against Supabase
+* Zero infrastructure cost ($0/month)
+* 412 users (400 members + 12 admins) supported on free tier
+
+---
+
 # Future Tasks (Out of Scope)
 
 * [ ] Graphical Family Tree
@@ -513,3 +604,7 @@ Relationship Types:
 * [ ] Mobile Application
 * [ ] Multi-language Support
 * [ ] Multi-community SaaS Dashboard
+* [ ] Supabase Realtime subscriptions (live updates)
+* [ ] Supabase Storage migration from R2
+* [ ] OAuth providers (Google, Facebook login)
+* [ ] Database backups to external provider
