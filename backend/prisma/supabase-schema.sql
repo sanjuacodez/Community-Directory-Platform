@@ -207,6 +207,18 @@ CREATE POLICY "Auth read relationships" ON member_relationships FOR SELECT USING
 CREATE POLICY "Auth read roles" ON roles FOR SELECT USING (true);
 CREATE POLICY "Auth read user_roles" ON user_roles FOR SELECT USING (true);
 
+-- Helper function for admin check (must be defined before policies that use it)
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM user_roles ur
+    JOIN roles r ON r.id = ur.role_id
+    WHERE ur.user_id = auth.uid() AND r.name = 'super_admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- RLS Policies: Admin full access (users with super_admin role)
 CREATE POLICY "Admin all communities" ON communities FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 CREATE POLICY "Admin all families" ON families FOR ALL USING (is_admin()) WITH CHECK (is_admin());
@@ -219,15 +231,3 @@ CREATE POLICY "Admin all jobs" ON jobs FOR ALL USING (is_admin()) WITH CHECK (is
 CREATE POLICY "Admin all obituaries" ON obituaries FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 CREATE POLICY "Admin user_roles" ON user_roles FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 CREATE POLICY "Admin audit_logs" ON audit_logs FOR SELECT USING (is_admin());
-
--- Helper function for admin check
-CREATE OR REPLACE FUNCTION is_admin()
-RETURNS boolean AS $$
-BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM user_roles ur
-    JOIN roles r ON r.id = ur.role_id
-    WHERE ur.user_id = auth.uid() AND r.name = 'super_admin'
-  );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
