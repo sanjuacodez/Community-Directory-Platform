@@ -4,6 +4,16 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import type { RegisterDto, LoginDto } from './dto/auth.dto';
 
+const ROLE_PRIORITY: Record<string, number> = {
+  super_admin: 3,
+  family_admin: 2,
+  member: 1,
+};
+
+function getPrimaryRole(roles: string[]): string {
+  return roles.sort((a, b) => (ROLE_PRIORITY[b] ?? 0) - (ROLE_PRIORITY[a] ?? 0))[0];
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -41,14 +51,15 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const primaryRole = user.userRoles[0]?.role.name ?? 'member';
+    const roles = user.userRoles.map((ur) => ur.role.name);
+    const primaryRole = getPrimaryRole(roles);
     const tokens = await this.generateTokens(user.id, user.email, primaryRole);
 
     return {
       user: {
         id: user.id,
         email: user.email,
-        roles: user.userRoles.map((ur) => ur.role.name),
+        roles,
       },
       ...tokens,
     };
@@ -65,7 +76,8 @@ export class AuthService {
         throw new UnauthorizedException('User not found');
       }
 
-      const primaryRole = user.userRoles[0]?.role.name ?? 'member';
+      const roles = user.userRoles.map((ur) => ur.role.name);
+      const primaryRole = getPrimaryRole(roles);
       return this.generateTokens(user.id, user.email, primaryRole);
     } catch {
       throw new UnauthorizedException('Invalid refresh token');

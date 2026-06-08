@@ -4,7 +4,7 @@
 
 ## Project Status
 
-Current Phase: Setup
+Current Phase: Phase 2
 
 ---
 
@@ -91,9 +91,9 @@ Current Phase: Setup
 
 ## Community Entity
 
-* [ ] Create Community model
-* [ ] Create Community CRUD APIs
-* [ ] Create Community validation
+* [x] Create Community model
+* [x] Create Community CRUD APIs
+* [x] Create Community validation
 
 ### Acceptance Criteria
 
