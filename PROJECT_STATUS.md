@@ -2,7 +2,34 @@
 
 ## Current Phase
 
-Phase 17 - Supabase Migration (Not Started)
+## Current Phase
+
+Phase 17 - Supabase Migration (In Progress)
+
+## Completed Phases (0-16)
+
+All 16 original phases complete. 39 API endpoints, 21 frontend pages, 53 unit tests, 21 E2E tests.
+
+## Phase 17 - Supabase Migration
+
+### Completed
+- [x] 17.1: Schema SQL generated (supabase-schema.sql with UUIDs + RLS)
+- [x] 17.2: All 21 frontend pages migrated to Supabase SDK
+- [x] Auth store replaced with Supabase Auth
+- [x] Supabase MCP authenticated (project: fflgfmhliwrltyjbfguf)
+- [x] opencode.json with Supabase MCP config
+- [x] Frontend builds successfully
+
+### Pending (Manual)
+- [ ] Run supabase-schema.sql in Supabase SQL Editor
+- [ ] Enable Email/Password auth provider in Supabase
+- [ ] Copy anon key to frontend/.env.local
+- [ ] Test with `npm run dev`
+
+### Next
+- [ ] 17.3: Edge Functions for relationship validation, CSV import/export
+- [ ] 17.4: Test RLS policies
+- [ ] 17.5: Remove NestJS backend (archive)
 
 ## Completed Phases (0-16)
 
