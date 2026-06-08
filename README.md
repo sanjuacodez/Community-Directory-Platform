@@ -55,6 +55,13 @@ echo "NEXT_PUBLIC_R2_PUBLIC_URL=https://your-bucket.r2.dev" >> frontend/.env.loc
 cd frontend && npm run dev
 ```
 
+### Demo Credentials
+
+- **URL:** http://localhost:3000/login
+- **Email:** `admin@communityportal.com`
+- **Password:** `admin123456`
+- **Role:** Super Admin (full access to all features)
+
 The app runs at **http://localhost:3000**. No backend server needed.
 
 ---
