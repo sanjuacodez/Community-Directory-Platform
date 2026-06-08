@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 6 - Relationship Engine (Complete)
+Phase 7 - Search & Directory (Complete)
 
 ## Completed Tasks
 

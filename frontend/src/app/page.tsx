@@ -32,10 +32,15 @@ export default function Home() {
             Browse and manage member directory
           </p>
         </Link>
-        <div className="rounded-xl border border-zinc-200 bg-white p-6 opacity-50">
+        <Link
+          href="/directory"
+          className="rounded-xl border border-zinc-200 bg-white p-6 hover:border-zinc-400 transition-colors"
+        >
           <h2 className="font-semibold">Directory</h2>
-          <p className="mt-1 text-sm text-zinc-500">Coming soon</p>
-        </div>
+          <p className="mt-1 text-sm text-zinc-500">
+            Search and filter community members
+          </p>
+        </Link>
       </div>
     </div>
   );

@@ -270,11 +270,11 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Implement member search API
-* [ ] Implement profession filter
-* [ ] Implement blood group filter
-* [ ] Implement family filter
-* [ ] Implement location filter
+* [x] Implement member search API
+* [x] Implement profession filter
+* [x] Implement blood group filter
+* [x] Implement family filter
+* [x] Implement location filter
 
 ### Acceptance Criteria
 
@@ -284,9 +284,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Directory page
-* [ ] Search bar
-* [ ] Filter sidebar
+* [x] Directory page
+* [x] Search bar
+* [x] Filter sidebar
 
 ### Acceptance Criteria
 
