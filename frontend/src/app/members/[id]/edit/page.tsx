@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
+import { ImageUpload } from '@/components/image-upload';
 
 const BLOOD=['','A+','A-','B+','B-','AB+','AB-','O+','O-'];
 
@@ -18,7 +19,7 @@ export default function EditMemberPage() {
 
   const s=(k:string,v:any)=>setF((p:any)=>({...p,[k]:v}));
   const submit=async(e:React.FormEvent)=>{e.preventDefault();setError('');setLoading(true);
-    try{const{error:err}=await supabase.from('members').update({first_name:f.first_name,last_name:f.last_name,community_id:f.community_id,family_id:f.family_id,gender:f.gender,date_of_birth:f.date_of_birth||null,blood_group:f.blood_group||null,email:f.email||null,phone:f.phone||null,profession:f.profession||null,organization:f.organization||null,education:f.education||null,location:f.location||null}).eq('id',p.id);if(err)throw new Error(err.message);router.push('/members');}
+    try{const{error:err}=await supabase.from('members').update({first_name:f.first_name,last_name:f.last_name,community_id:f.community_id,family_id:f.family_id,gender:f.gender,date_of_birth:f.date_of_birth||null,blood_group:f.blood_group||null,email:f.email||null,phone:f.phone||null,profession:f.profession||null,organization:f.organization||null,education:f.education||null,location:f.location||null,profile_image:f.profile_image||null}).eq('id',p.id);if(err)throw new Error(err.message);router.push('/members');}
     catch(err:any){setError(err.message)}finally{setLoading(false)}};
 
   return(<div className="mx-auto max-w-lg space-y-6"><h1 className="text-2xl font-bold">Edit Member</h1><form onSubmit={submit} className="space-y-4 rounded-xl border border-zinc-200 bg-white p-6">
@@ -29,6 +30,7 @@ export default function EditMemberPage() {
     <div className="grid grid-cols-2 gap-3"><div><label className="block text-sm font-medium">Profession</label><input value={f.profession??''} onChange={e=>s('profession',e.target.value)} className="input"/></div><div><label className="block text-sm font-medium">Organization</label><input value={f.organization??''} onChange={e=>s('organization',e.target.value)} className="input"/></div></div>
     <div className="grid grid-cols-2 gap-3"><div><label className="block text-sm font-medium">Education</label><input value={f.education??''} onChange={e=>s('education',e.target.value)} className="input"/></div><div><label className="block text-sm font-medium">Location</label><input value={f.location??''} onChange={e=>s('location',e.target.value)} className="input"/></div></div>
     <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.is_deceased??false} onChange={e=>s('is_deceased',e.target.checked)}/> Mark as deceased</label>
+    <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => s('profile_image', url)} />
     {error&&<p className="text-sm text-red-600">{error}</p>}
     <div className="flex gap-3"><button type="submit" disabled={loading} className="btn-primary">{loading?'Saving...':'Save Changes'}</button><button type="button" onClick={()=>router.back()} className="btn-secondary">Cancel</button></div>
   </form></div>);

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
+import { ImageUpload } from '@/components/image-upload';
 
 const BLOOD = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -10,7 +11,7 @@ export default function CreateMemberPage() {
   const router = useRouter(); const { user } = useAuth();
   const [communities, setCommunities] = useState<any[]>([]); const [families, setFamilies] = useState<any[]>([]);
   const [existingMembers, setExistingMembers] = useState<any[]>([]);
-  const [f, setF] = useState<any>({ community_id: '', family_id: '', first_name: '', last_name: '', gender: '', date_of_birth: '', blood_group: '', email: '', phone: '', profession: '', organization: '', education: '', location: '', visibility: 'community_only', is_deceased: false });
+  const [f, setF] = useState<any>({ community_id: '', family_id: '', first_name: '', last_name: '', gender: '', date_of_birth: '', blood_group: '', email: '', phone: '', profession: '', organization: '', education: '', location: '', profile_image: '', visibility: 'community_only', is_deceased: false });
   const [fatherId, setFatherId] = useState('');
   const [motherId, setMotherId] = useState('');
   const [spouseId, setSpouseId] = useState('');
@@ -94,6 +95,8 @@ export default function CreateMemberPage() {
         <div className="grid grid-cols-2 gap-3"><Input label="Email" field="email" type="email" /><Input label="Phone" field="phone" /></div>
         <div className="grid grid-cols-2 gap-3"><Input label="Profession" field="profession" /><Input label="Organization" field="organization" /></div>
         <div className="grid grid-cols-2 gap-3"><Input label="Education" field="education" /><Input label="Location" field="location" /></div>
+
+        <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => s('profile_image', url)} />
 
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div className="flex gap-3"><button type="submit" disabled={loading} className="btn-primary">{loading ? 'Creating...' : 'Create Member'}</button><button type="button" onClick={() => router.back()} className="btn-secondary">Cancel</button></div>

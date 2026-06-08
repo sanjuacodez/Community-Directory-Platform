@@ -52,28 +52,26 @@ test.describe('Responsive Design', () => {
 });
 
 test.describe('Auth Flow', () => {
-  test('login form renders', async ({ page }) => {
-    await page.goto('/families');
+  test('login page renders', async ({ page }) => {
+    await page.goto('/login');
     await expect(page.locator('input[type="email"]')).toBeVisible();
     await expect(page.locator('input[type="password"]')).toBeVisible();
-    await expect(page.locator('button[type="submit"]')).toContainText('Login');
+    await expect(page.locator('button[type="submit"]')).toContainText('Sign');
   });
 
-  test('login shows validation for empty fields', async ({ page }) => {
-    await page.goto('/families');
-    // Click submit without filling
-    const submit = page.locator('button[type="submit"]');
-    // The form is there
-    await expect(page.locator('input[type="email"]')).toBeVisible();
-  });
-
-  test('login with credentials works', async ({ page }) => {
-    await page.goto('/families');
-    await page.fill('input[type="email"]', 'admin@example.com');
+  test('login with credentials', async ({ page }) => {
+    await page.goto('/login');
+    await page.fill('input[type="email"]', 'admin@communityportal.com');
     await page.fill('input[type="password"]', 'admin123456');
     await page.click('button[type="submit"]');
+    await page.waitForURL('**/');
+    await expect(page.locator('nav')).toContainText('admin@communityportal.com');
+  });
+
+  test('protected page redirects to login', async ({ page }) => {
+    await page.goto('/families');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('h1')).toContainText('Families');
+    await expect(page.locator('body')).toContainText('login');
   });
 });
 
