@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AuthProvider } from '@/components/auth-provider';
+import { NavUserMenu } from '@/components/nav-user-menu';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -42,6 +43,7 @@ export default function RootLayout({
                 Directory
               </Link>
             </div>
+            <NavUserMenu />
           </div>
         </nav>
         <main className="mx-auto max-w-5xl px-4 py-8">

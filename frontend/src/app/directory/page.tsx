@@ -19,7 +19,7 @@ export default function DirectoryPage() {
     q.order('created_at',{ascending:false}).then(({data})=>{setMembers((data as any)??[]);setLoading(false)});
   },[user,search,blood,prof,loc]);
 
-  if(!user)return<div className="p-6 text-center"><p>Please login.</p></div>;
+  if(!user)return<div className="rounded-xl border border-zinc-200 bg-white p-12 text-center"><p className="text-zinc-500">Please <a href="/login" className="text-zinc-900 font-medium hover:underline">login</a> to view directory.</p></div>;
 
   return (<div className="space-y-6"><h1 className="text-2xl font-bold">Member Directory</h1>
     <div className="flex flex-wrap gap-3">
