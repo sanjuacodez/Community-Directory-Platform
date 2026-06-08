@@ -324,8 +324,8 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Create Event model
-* [ ] Create event CRUD APIs
+* [x] Create Event model
+* [x] Create event CRUD APIs
 
 ### Acceptance Criteria
 
@@ -335,9 +335,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Event list page
-* [ ] Event details page
-* [ ] Admin event management page
+* [x] Event list page
+* [x] Event details page
+* [x] Admin event management page
 
 ### Acceptance Criteria
 
