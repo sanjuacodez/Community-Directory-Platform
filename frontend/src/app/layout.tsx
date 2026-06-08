@@ -33,6 +33,9 @@ export default function RootLayout({
               <Link href="/announcements" className="hover:text-zinc-600">
                 News
               </Link>
+              <Link href="/communities" className="hover:text-zinc-600">
+                Communities
+              </Link>
               <Link href="/families" className="hover:text-zinc-600">
                 Families
               </Link>
