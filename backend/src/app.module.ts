@@ -11,6 +11,7 @@ import { MediaModule } from './media/media.module';
 import { RelationshipsModule } from './relationships/relationships.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { EventsModule } from './events/events.module';
+import { BusinessesModule } from './businesses/businesses.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventsModule } from './events/events.module';
     RelationshipsModule,
     AnnouncementsModule,
     EventsModule,
+    BusinessesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

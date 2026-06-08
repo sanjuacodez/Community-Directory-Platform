@@ -349,8 +349,8 @@ Relationship Types:
 
 ## Backend
 
-* [ ] Create Business model
-* [ ] Create business CRUD APIs
+* [x] Create Business model
+* [x] Create business CRUD APIs
 
 ### Acceptance Criteria
 
@@ -360,9 +360,9 @@ Relationship Types:
 
 ## Frontend
 
-* [ ] Business listing page
-* [ ] Business details page
-* [ ] Admin business management page
+* [x] Business listing page
+* [x] Business details page
+* [x] Admin business management page
 
 ### Acceptance Criteria
 
