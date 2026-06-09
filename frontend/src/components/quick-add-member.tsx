@@ -10,20 +10,22 @@ interface Props {
 }
 
 export function QuickAddMember({ communityId, familyId, onCreated, onClose }: Props) {
-  const [first, setFirst] = useState('');
-  const [last, setLast] = useState('');
+  const [fullName, setFullName] = useState('');
   const [gender, setGender] = useState('male');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!first.trim() || !last.trim()) { setError('Name is required'); return; }
+    const sp = fullName.trim().indexOf(' ');
+    const firstName = sp > 0 ? fullName.slice(0, sp) : fullName.trim();
+    const lastName = sp > 0 ? fullName.slice(sp + 1) : '';
+    if (!firstName || !lastName) { setError('Please enter first and last name'); return; }
     setLoading(true); setError('');
     try {
       const { data, error: err } = await supabase.from('members').insert({
         community_id: communityId, family_id: familyId,
-        first_name: first.trim(), last_name: last.trim(), gender,
+        first_name: firstName, last_name: lastName, gender,
         visibility: 'family_only',
       }).select('id,first_name,last_name,gender').single();
       if (err) throw err;
@@ -40,8 +42,7 @@ export function QuickAddMember({ communityId, familyId, onCreated, onClose }: Pr
           <button onClick={onClose} className="btn btn-ghost btn-sm" aria-label="Close">&times;</button>
         </div>
         <form onSubmit={submit} className="space-y-3">
-          <div><label className="block text-sm font-medium mb-1">First Name *</label><input value={first} onChange={e => setFirst(e.target.value)} className="input" autoFocus required /></div>
-          <div><label className="block text-sm font-medium mb-1">Last Name *</label><input value={last} onChange={e => setLast(e.target.value)} className="input" required /></div>
+          <div><label className="block text-sm font-medium mb-1">Full Name *</label><input value={fullName} onChange={e => setFullName(e.target.value)} className="input" autoFocus required placeholder="First Last" /></div>
           <div><label className="block text-sm font-medium mb-1">Gender</label><select value={gender} onChange={e => setGender(e.target.value)} className="input"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
           <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Community & family assigned automatically. Add more details later from their profile.</p>
           {error && <p className="text-sm" style={{ color: 'var(--color-danger)' }}>{error}</p>}
