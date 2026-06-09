@@ -84,8 +84,11 @@ export default function EditMemberPage() {
       const { error: err } = await supabase.from('members').update({
         first_name: f.first_name, last_name: f.last_name, community_id: f.community_id, family_id: f.family_id,
         gender: f.gender, date_of_birth: f.date_of_birth || null, blood_group: f.blood_group || null,
-        email: f.email || null, phone: f.phone || null, profession: f.profession || null,
-        organization: f.organization || null, education: f.education || null, location: f.location || null,
+        email: f.email || null, phone: f.phone || null, whatsapp: f.whatsapp || null,
+        profession: f.profession || null, organization: f.organization || null,
+        education: f.education || null, location: f.location || null,
+        facebook: f.facebook || null, instagram: f.instagram || null,
+        linkedin: f.linkedin || null, twitter: f.twitter || null,
         profile_image: f.profile_image || null, is_deceased: f.is_deceased ?? false,
       }).eq('id', p.id);
       if (err) throw new Error(err.message);
@@ -113,10 +116,15 @@ export default function EditMemberPage() {
           <Field label="Blood Group"><select value={f.blood_group ?? ''} onChange={e => setF((p: any) => ({ ...p, blood_group: e.target.value }))} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
           <Field label="Email"><input type="email" value={f.email ?? ''} onChange={e => setF((p: any) => ({ ...p, email: e.target.value }))} className="input" /></Field>
           <Field label="Phone"><input value={f.phone ?? ''} onChange={e => setF((p: any) => ({ ...p, phone: e.target.value }))} className="input" /></Field>
+          <Field label="WhatsApp"><input value={f.whatsapp ?? ''} onChange={e => setF((p: any) => ({ ...p, whatsapp: e.target.value }))} className="input" placeholder="+91xxxxxxxxxx" /></Field>
           <Field label="Profession"><input value={f.profession ?? ''} onChange={e => setF((p: any) => ({ ...p, profession: e.target.value }))} className="input" /></Field>
           <Field label="Organization"><input value={f.organization ?? ''} onChange={e => setF((p: any) => ({ ...p, organization: e.target.value }))} className="input" /></Field>
           <Field label="Education"><input value={f.education ?? ''} onChange={e => setF((p: any) => ({ ...p, education: e.target.value }))} className="input" /></Field>
           <Field label="Location"><input value={f.location ?? ''} onChange={e => setF((p: any) => ({ ...p, location: e.target.value }))} className="input" /></Field>
+          <Field label="Facebook"><input value={f.facebook ?? ''} onChange={e => setF((p: any) => ({ ...p, facebook: e.target.value }))} className="input" placeholder="https://fb.com/..." /></Field>
+          <Field label="Instagram"><input value={f.instagram ?? ''} onChange={e => setF((p: any) => ({ ...p, instagram: e.target.value }))} className="input" placeholder="https://instagram.com/..." /></Field>
+          <Field label="LinkedIn"><input value={f.linkedin ?? ''} onChange={e => setF((p: any) => ({ ...p, linkedin: e.target.value }))} className="input" placeholder="https://linkedin.com/in/..." /></Field>
+          <Field label="Twitter/X"><input value={f.twitter ?? ''} onChange={e => setF((p: any) => ({ ...p, twitter: e.target.value }))} className="input" placeholder="https://x.com/..." /></Field>
         </div>
 
         <div style={{marginTop:'1rem'}}>

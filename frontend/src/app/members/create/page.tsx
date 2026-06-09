@@ -85,14 +85,19 @@ export default function CreateMemberPage() {
         <div className="grid grid-cols-2 gap-3">
           <Field label="Email"><input type="email" value={f.email ?? ''} onChange={e => setF((p: any) => ({ ...p, email: e.target.value }))} className="input" /></Field>
           <Field label="Phone"><input type="text" value={f.phone ?? ''} onChange={e => setF((p: any) => ({ ...p, phone: e.target.value }))} className="input" /></Field>
+          <Field label="WhatsApp"><input type="text" value={f.whatsapp ?? ''} onChange={e => setF((p: any) => ({ ...p, whatsapp: e.target.value }))} className="input" placeholder="+91xxxxxxxxxx" /></Field>
+          <Field label="Location"><input type="text" value={f.location ?? ''} onChange={e => setF((p: any) => ({ ...p, location: e.target.value }))} className="input" /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Profession"><input type="text" value={f.profession ?? ''} onChange={e => setF((p: any) => ({ ...p, profession: e.target.value }))} className="input" /></Field>
           <Field label="Organization"><input type="text" value={f.organization ?? ''} onChange={e => setF((p: any) => ({ ...p, organization: e.target.value }))} className="input" /></Field>
+          <Field label="Education"><input type="text" value={f.education ?? ''} onChange={e => setF((p: any) => ({ ...p, education: e.target.value }))} className="input" /></Field>
+          <Field label="Facebook"><input type="text" value={f.facebook ?? ''} onChange={e => setF((p: any) => ({ ...p, facebook: e.target.value }))} className="input" placeholder="https://fb.com/..." /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Education"><input type="text" value={f.education ?? ''} onChange={e => setF((p: any) => ({ ...p, education: e.target.value }))} className="input" /></Field>
-          <Field label="Location"><input type="text" value={f.location ?? ''} onChange={e => setF((p: any) => ({ ...p, location: e.target.value }))} className="input" /></Field>
+          <Field label="Instagram"><input type="text" value={f.instagram ?? ''} onChange={e => setF((p: any) => ({ ...p, instagram: e.target.value }))} className="input" placeholder="https://instagram.com/..." /></Field>
+          <Field label="LinkedIn"><input type="text" value={f.linkedin ?? ''} onChange={e => setF((p: any) => ({ ...p, linkedin: e.target.value }))} className="input" placeholder="https://linkedin.com/in/..." /></Field>
+          <Field label="Twitter/X"><input type="text" value={f.twitter ?? ''} onChange={e => setF((p: any) => ({ ...p, twitter: e.target.value }))} className="input" placeholder="https://x.com/..." /></Field>
         </div>
 
         <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => setF((p: any) => ({ ...p, profile_image: url }))} />
