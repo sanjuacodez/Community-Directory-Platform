@@ -94,13 +94,13 @@ export default function MembersPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {members.map((m, i) => (
             <div key={m.id} className="card" style={{ padding: 0, overflow: 'hidden', cursor: 'pointer' }} onClick={() => openPopup(i)}>
-              {/* Cover gradient */}
-              <div style={{ height: 56, background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))', position: 'relative' }}>
+              {/* Cover gradient based on gender */}
+              <div style={{ height: 56, background: m.gender === 'male' ? 'linear-gradient(135deg, #6a9fd8, #8cbae8)' : m.gender === 'female' ? 'linear-gradient(135deg, #d88b9e, #e8a3b5)' : 'linear-gradient(135deg, #9b8ec4, #b8a8db)', position: 'relative', borderTopLeftRadius: 'var(--radius-lg)', borderTopRightRadius: 'var(--radius-lg)' }}>
                 <div style={{ position: 'absolute', bottom: -26, left: '50%', transform: 'translateX(-50%)' }}>
                   {m.profile_image ? (
-                    <img src={m.profile_image} alt="" style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }} />
+                    <img src={m.profile_image} alt="" style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }} />
                   ) : (
-                    <div className="avatar" style={{ width: 56, height: 56, fontSize: '1.1rem', border: '3px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>{m.first_name?.[0]}{m.last_name?.[0]}</div>
+                    <div className={`avatar ${m.gender === 'male' ? 'gender-male' : m.gender === 'female' ? 'gender-female' : 'gender-other'}`} style={{ width: 56, height: 56, fontSize: '1.1rem', border: '3px solid white', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}>{m.first_name?.[0]}{m.last_name?.[0]}</div>
                   )}
                 </div>
               </div>
