@@ -35,8 +35,9 @@ export default function MembersPage() {
   useEffect(() => {
     setLoading(true);
     let q = supabase.from('members').select('*, family:families(id,name), community:communities(id,name)', { count: 'exact' }).neq('status', 'deleted');
-    if (filters.communityIds.length) q = q.in('community_id', filters.communityIds);
-    if (filters.familyIds.length) q = q.in('family_id', filters.familyIds);
+    // Only apply in() when there are values — empty array breaks Supabase
+    if (filters.communityIds.length > 0) q = q.in('community_id', filters.communityIds);
+    if (filters.familyIds.length > 0) q = q.in('family_id', filters.familyIds);
     if (filters.search) q = q.or(`first_name.ilike.%${filters.search}%,last_name.ilike.%${filters.search}%`);
     if (filters.bloodGroup) q = q.eq('blood_group', filters.bloodGroup);
     if (filters.profession) q = q.ilike('profession', `%${filters.profession}%`);

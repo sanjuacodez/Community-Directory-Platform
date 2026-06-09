@@ -168,15 +168,13 @@ export function FamilyTree({ members, relationships }: { members: Member[]; rela
       <div
         onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove}
         onMouseUp={() => setDragging(false)} onMouseLeave={() => setDragging(false)}
-        style={{ position: 'relative', overflow: 'hidden', height: 500, border: '2px dashed var(--color-border)', borderRadius: 'var(--radius)', cursor: dragging ? 'grabbing' : 'grab', background: 'var(--color-bg)' }}
+        style={{ position: 'relative', overflow: 'hidden', height: 550, border: '2px dashed var(--color-border)', borderRadius: 'var(--radius)', cursor: dragging ? 'grabbing' : 'grab', background: 'var(--color-bg)' }}
       >
-        <div style={{ transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`, transformOrigin: '0 0' }}>
-          <svg width={3000} height={3000} style={{ position: 'absolute', top: 0, left: 0 }}>{allLines}</svg>
-          <svg width={3000} height={3000} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}>{allNodes}</svg>
-          {/* Clickable overlay for nodes */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: 3000, height: 3000, pointerEvents: 'none' }}>
-            {/* The actual clickable areas are in the SVG rect elements which handle clicks via onClick */}
-          </div>
+        <div style={{ transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`, transformOrigin: 'center center', width: '100%', height: '100%', position: 'absolute', inset: 0 }}>
+          <svg width="100%" height="100%" viewBox="-500 -100 3000 2000" preserveAspectRatio="xMidYMid meet">
+            <g>{allLines}</g>
+            <g>{allNodes}</g>
+          </svg>
         </div>
       </div>
 
