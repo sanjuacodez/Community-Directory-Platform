@@ -16,12 +16,13 @@ Before starting any task, read the following files:
 
 1. docs/project-overview.md
 2. docs/architecture.md
-3. docs/database-schema.md
-4. docs/backend-specification.md
-5. docs/frontend-specification.md
-6. docs/user-roles-capabilities.md
-7. PROJECT_STATUS.md
-8. TASKS.md
+3. docs/design-system.md
+4. docs/database-schema.md
+5. docs/backend-specification.md
+6. docs/frontend-specification.md
+7. docs/user-roles-capabilities.md
+8. PROJECT_STATUS.md
+9. TASKS.md
 
 Do not start implementation until these files have been reviewed.
 
