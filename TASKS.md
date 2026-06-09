@@ -4,7 +4,7 @@
 
 ## Project Status
 
-Current Phase: Phase 17
+Current Phase: Phase 17 (Supabase Migration — Frontend Complete)
 
 ---
 

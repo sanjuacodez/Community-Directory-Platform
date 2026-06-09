@@ -90,6 +90,7 @@ npm run typecheck
 ---
 
 ## Documentation
+- [Deployment Guide](docs/deployment.md) — step-by-step deployment to Cloudflare Pages + Supabase
 - [Design System](docs/design-system.md) — claymorphism guide, colors, components
 - [Supabase Migration Plan](docs/supabase-migration-plan.md)
 - [User Roles & Capabilities](docs/user-roles-capabilities.md)
