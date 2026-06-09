@@ -98,11 +98,10 @@ export default function EditMemberPage() {
     <div style={{maxWidth:700,margin:'0 auto'}}>
       <h1 style={{fontSize:'var(--font-size-2xl)',fontWeight:700,marginBottom:'1.5rem'}}>Edit Member</h1>
       <form onSubmit={submit}>
-        <Section title="Profile Photo">
-          <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => s('profile_image', url)} />
-        </Section>
-
         <Section title="Basic Information">
+          <div style={{display:'flex',gap:'1.5rem',flexWrap:'wrap',marginBottom:'0.75rem'}}>
+            <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => s('profile_image', url)} />
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="First Name"><input value={f.first_name ?? ''} onChange={e => s('first_name', e.target.value)} className="input" required /></Field>
             <Field label="Last Name"><input value={f.last_name ?? ''} onChange={e => s('last_name', e.target.value)} className="input" required /></Field>
