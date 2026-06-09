@@ -93,20 +93,30 @@ export default function MembersPage() {
       {!loading && view === 'grid' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {members.map((m, i) => (
-            <div key={m.id} className="card" style={{ padding: '1rem', display: 'flex', gap: '0.75rem', alignItems: 'center', cursor: 'pointer' }} onClick={() => openPopup(i)}>
-              {m.profile_image ? (
-                <img src={m.profile_image} alt="" style={{ width: 52, height: 52, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
-              ) : (
-                <div className="avatar" style={{ width: 52, height: 52, fontSize: '1rem', flexShrink: 0 }}>{m.first_name?.[0]}{m.last_name?.[0]}</div>
-              )}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 600, color: 'var(--color-text)', fontSize: 'var(--font-size-sm)' }}>{m.first_name} {m.last_name}</div>
-                <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: '0.15rem' }}>{m.family?.name}{m.location ? ` · ${m.location}` : ''}</div>
-                {m.profession && <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: '0.1rem' }}>{m.profession}</div>}
-                <div className="flex gap-1" style={{ marginTop: '0.35rem' }}>
-                  <span className="badge" style={{ fontSize: '0.6rem', padding: '0.1rem 0.4rem' }}>{m.gender}</span>
+            <div key={m.id} className="card" style={{ padding: 0, overflow: 'hidden', cursor: 'pointer' }} onClick={() => openPopup(i)}>
+              {/* Cover gradient */}
+              <div style={{ height: 56, background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))', position: 'relative' }}>
+                <div style={{ position: 'absolute', bottom: -26, left: '50%', transform: 'translateX(-50%)' }}>
+                  {m.profile_image ? (
+                    <img src={m.profile_image} alt="" style={{ width: 56, height: 56, borderRadius: '50%', objectFit: 'cover', border: '3px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }} />
+                  ) : (
+                    <div className="avatar" style={{ width: 56, height: 56, fontSize: '1.1rem', border: '3px solid white', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>{m.first_name?.[0]}{m.last_name?.[0]}</div>
+                  )}
+                </div>
+              </div>
+              <div style={{ padding: '2rem 1rem 1rem', textAlign: 'center' }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--font-size-base)', color: 'var(--color-text)' }}>{m.first_name} {m.last_name}</div>
+                <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: '0.15rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', flexWrap: 'wrap' }}>
+                  <span className="capitalize">{m.gender}</span>
                   {m.blood_group && <span className="badge" style={{ fontSize: '0.6rem', padding: '0.1rem 0.4rem', background: 'rgba(212,168,83,0.12)', color: 'var(--color-accent)' }}>{m.blood_group}</span>}
                 </div>
+                {m.profession && <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text)', marginTop: '0.5rem', fontWeight: 500 }}>{m.profession}</div>}
+                {(m.family?.name || m.location) && (
+                  <div style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: '0.25rem' }}>
+                    {m.family?.name}{m.location ? ` · ${m.location}` : ''}
+                  </div>
+                )}
+                <div style={{ marginTop: '0.5rem', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)' }}>{m.community?.name}</div>
               </div>
             </div>
           ))}
