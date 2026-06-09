@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
 import { ImageUpload } from '@/components/image-upload';
-import { ImageUpload } from '@/components/image-upload';
 
 const BLOOD = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -57,18 +56,18 @@ export default function CreateMemberPage() {
       <h1 className="text-2xl font-bold">Add Member</h1>
       <form onSubmit={submit} className="space-y-4 rounded-xl border border-zinc-200 bg-white p-6">
         <div className="grid grid-cols-2 gap-3">
-          <Field label="First Name" required><input type="text" value={f.first_name} onChange={e => setF(p => ({ ...p, first_name: e.target.value }))} className="input" required /></Field>
-          <Field label="Last Name" required><input type="text" value={f.last_name} onChange={e => setF(p => ({ ...p, last_name: e.target.value }))} className="input" required /></Field>
+          <Field label="First Name" required><input type="text" value={f.first_name} onChange={e => setF((p: any) => ({ ...p, first_name: e.target.value }))} className="input" required /></Field>
+          <Field label="Last Name" required><input type="text" value={f.last_name} onChange={e => setF((p: any) => ({ ...p, last_name: e.target.value }))} className="input" required /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Community" required><select value={f.community_id} onChange={e => setF(p => ({ ...p, community_id: e.target.value }))} className="input" required><option value="">Select</option>{communities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></Field>
-          <Field label="Family" required><select value={f.family_id} onChange={e => { setF(p => ({ ...p, family_id: e.target.value })); setFatherId(''); setMotherId(''); setSpouseId(''); }} className="input" required><option value="">Select</option>{families.filter(ff => !f.community_id || ff.community_id === f.community_id).map(ff => <option key={ff.id} value={ff.id}>{ff.name}</option>)}</select></Field>
+          <Field label="Community" required><select value={f.community_id} onChange={e => setF((p: any) => ({ ...p, community_id: e.target.value }))} className="input" required><option value="">Select</option>{communities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></Field>
+          <Field label="Family" required><select value={f.family_id} onChange={e => { setF((p: any) => ({ ...p, family_id: e.target.value })); setFatherId(''); setMotherId(''); setSpouseId(''); }} className="input" required><option value="">Select</option>{families.filter(ff => !f.community_id || ff.community_id === f.community_id).map(ff => <option key={ff.id} value={ff.id}>{ff.name}</option>)}</select></Field>
         </div>
         <div className="grid grid-cols-4 gap-3">
-          <Field label="Gender" required><select value={f.gender} onChange={e => setF(p => ({ ...p, gender: e.target.value }))} className="input" required><option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></Field>
-          <Field label="DOB"><input type="date" value={f.date_of_birth} onChange={e => setF(p => ({ ...p, date_of_birth: e.target.value }))} className="input" /></Field>
-          <Field label="Blood Group"><select value={f.blood_group} onChange={e => setF(p => ({ ...p, blood_group: e.target.value }))} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
-          <div><label className="block text-sm font-medium">&nbsp;</label><label className="flex items-center gap-2 text-sm pt-2"><input type="checkbox" checked={f.is_deceased} onChange={e => setF(p => ({ ...p, is_deceased: e.target.checked }))} /> Deceased</label></div>
+          <Field label="Gender" required><select value={f.gender} onChange={e => setF((p: any) => ({ ...p, gender: e.target.value }))} className="input" required><option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></Field>
+          <Field label="DOB"><input type="date" value={f.date_of_birth} onChange={e => setF((p: any) => ({ ...p, date_of_birth: e.target.value }))} className="input" /></Field>
+          <Field label="Blood Group"><select value={f.blood_group} onChange={e => setF((p: any) => ({ ...p, blood_group: e.target.value }))} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
+          <div><label className="block text-sm font-medium">&nbsp;</label><label className="flex items-center gap-2 text-sm pt-2"><input type="checkbox" checked={f.is_deceased} onChange={e => setF((p: any) => ({ ...p, is_deceased: e.target.checked }))} /> Deceased</label></div>
         </div>
 
         {f.family_id && familyMembers.length > 0 && (
@@ -84,19 +83,19 @@ export default function CreateMemberPage() {
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Email"><input type="email" value={f.email ?? ''} onChange={e => setF(p => ({ ...p, email: e.target.value }))} className="input" /></Field>
-          <Field label="Phone"><input type="text" value={f.phone ?? ''} onChange={e => setF(p => ({ ...p, phone: e.target.value }))} className="input" /></Field>
+          <Field label="Email"><input type="email" value={f.email ?? ''} onChange={e => setF((p: any) => ({ ...p, email: e.target.value }))} className="input" /></Field>
+          <Field label="Phone"><input type="text" value={f.phone ?? ''} onChange={e => setF((p: any) => ({ ...p, phone: e.target.value }))} className="input" /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Profession"><input type="text" value={f.profession ?? ''} onChange={e => setF(p => ({ ...p, profession: e.target.value }))} className="input" /></Field>
-          <Field label="Organization"><input type="text" value={f.organization ?? ''} onChange={e => setF(p => ({ ...p, organization: e.target.value }))} className="input" /></Field>
+          <Field label="Profession"><input type="text" value={f.profession ?? ''} onChange={e => setF((p: any) => ({ ...p, profession: e.target.value }))} className="input" /></Field>
+          <Field label="Organization"><input type="text" value={f.organization ?? ''} onChange={e => setF((p: any) => ({ ...p, organization: e.target.value }))} className="input" /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Education"><input type="text" value={f.education ?? ''} onChange={e => setF(p => ({ ...p, education: e.target.value }))} className="input" /></Field>
-          <Field label="Location"><input type="text" value={f.location ?? ''} onChange={e => setF(p => ({ ...p, location: e.target.value }))} className="input" /></Field>
+          <Field label="Education"><input type="text" value={f.education ?? ''} onChange={e => setF((p: any) => ({ ...p, education: e.target.value }))} className="input" /></Field>
+          <Field label="Location"><input type="text" value={f.location ?? ''} onChange={e => setF((p: any) => ({ ...p, location: e.target.value }))} className="input" /></Field>
         </div>
 
-        <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => setF(p => ({ ...p, profile_image: url }))} />
+        <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => setF((p: any) => ({ ...p, profile_image: url }))} />
 
         <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 text-xs text-blue-700">
           <strong>Note:</strong> If the member needs to login, ask them to register at <a href="/login" target="_blank" className="underline">the login page</a> with the same email first. Then create their member record here.

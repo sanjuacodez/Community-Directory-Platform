@@ -1,57 +1,21 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { AuthProvider } from '@/components/auth-provider';
-import { NavUserMenu } from '@/components/nav-user-menu';
+import { Nav } from '@/components/nav';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Community Directory Platform',
-  description: 'Manage families, members, relationships, and more',
+  title: 'CommunityHub - Directory Platform',
+  description: 'Manage families, members, relationships, and community activities',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-zinc-50 text-zinc-900 antialiased">
-        <nav className="border-b border-zinc-200 bg-white">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-            <Link href="/" className="text-lg font-bold text-zinc-900">
-              Community Directory
-            </Link>
-            <div className="flex gap-4 text-sm">
-              <Link href="/dashboard" className="hover:text-zinc-600">Dashboard</Link>
-              <Link href="/jobs" className="hover:text-zinc-600">Jobs</Link>
-              <Link href="/obituaries" className="hover:text-zinc-600">Obituaries</Link>
-              <Link href="/businesses" className="hover:text-zinc-600">Businesses</Link>
-              <Link href="/events" className="hover:text-zinc-600">
-                Events
-              </Link>
-              <Link href="/announcements" className="hover:text-zinc-600">
-                News
-              </Link>
-              <Link href="/communities" className="hover:text-zinc-600">
-                Communities
-              </Link>
-              <Link href="/families" className="hover:text-zinc-600">
-                Families
-              </Link>
-              <Link href="/members" className="hover:text-zinc-600">
-                Members
-              </Link>
-              <Link href="/directory" className="hover:text-zinc-600">
-                Directory
-              </Link>
-            </div>
-            <NavUserMenu />
-          </div>
-        </nav>
-        <main className="mx-auto max-w-5xl px-4 py-8">
-          <AuthProvider>{children}</AuthProvider>
-        </main>
+      <body>
+        <AuthProvider>
+          <Nav />
+          <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );

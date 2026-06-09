@@ -45,32 +45,32 @@ export default function EditMemberPage() {
       <h1 className="text-2xl font-bold">Edit Member</h1>
       <form onSubmit={submit} className="space-y-4 rounded-xl border border-zinc-200 bg-white p-6">
         <div className="grid grid-cols-2 gap-3">
-          <Field label="First Name"><input value={f.first_name ?? ''} onChange={e => setF(p => ({ ...p, first_name: e.target.value }))} className="input" required /></Field>
-          <Field label="Last Name"><input value={f.last_name ?? ''} onChange={e => setF(p => ({ ...p, last_name: e.target.value }))} className="input" required /></Field>
+          <Field label="First Name"><input value={f.first_name ?? ''} onChange={e => setF((p: any) => ({ ...p, first_name: e.target.value }))} className="input" required /></Field>
+          <Field label="Last Name"><input value={f.last_name ?? ''} onChange={e => setF((p: any) => ({ ...p, last_name: e.target.value }))} className="input" required /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Community"><select value={f.community_id ?? ''} onChange={e => setF(p => ({ ...p, community_id: e.target.value }))} className="input" required>{communities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></Field>
-          <Field label="Family"><select value={f.family_id ?? ''} onChange={e => setF(p => ({ ...p, family_id: e.target.value }))} className="input" required>{families.filter(ff => !f.community_id || ff.community_id === f.community_id).map(ff => <option key={ff.id} value={ff.id}>{ff.name}</option>)}</select></Field>
+          <Field label="Community"><select value={f.community_id ?? ''} onChange={e => setF((p: any) => ({ ...p, community_id: e.target.value }))} className="input" required>{communities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></Field>
+          <Field label="Family"><select value={f.family_id ?? ''} onChange={e => setF((p: any) => ({ ...p, family_id: e.target.value }))} className="input" required>{families.filter(ff => !f.community_id || ff.community_id === f.community_id).map(ff => <option key={ff.id} value={ff.id}>{ff.name}</option>)}</select></Field>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          <Field label="Gender"><select value={f.gender ?? ''} onChange={e => setF(p => ({ ...p, gender: e.target.value }))} className="input"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></Field>
-          <Field label="DOB"><input type="date" value={f.date_of_birth?.split('T')[0] ?? ''} onChange={e => setF(p => ({ ...p, date_of_birth: e.target.value }))} className="input" /></Field>
-          <Field label="Blood Group"><select value={f.blood_group ?? ''} onChange={e => setF(p => ({ ...p, blood_group: e.target.value }))} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
+          <Field label="Gender"><select value={f.gender ?? ''} onChange={e => setF((p: any) => ({ ...p, gender: e.target.value }))} className="input"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></Field>
+          <Field label="DOB"><input type="date" value={f.date_of_birth?.split('T')[0] ?? ''} onChange={e => setF((p: any) => ({ ...p, date_of_birth: e.target.value }))} className="input" /></Field>
+          <Field label="Blood Group"><select value={f.blood_group ?? ''} onChange={e => setF((p: any) => ({ ...p, blood_group: e.target.value }))} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Email"><input type="email" value={f.email ?? ''} onChange={e => setF(p => ({ ...p, email: e.target.value }))} className="input" /></Field>
-          <Field label="Phone"><input value={f.phone ?? ''} onChange={e => setF(p => ({ ...p, phone: e.target.value }))} className="input" /></Field>
+          <Field label="Email"><input type="email" value={f.email ?? ''} onChange={e => setF((p: any) => ({ ...p, email: e.target.value }))} className="input" /></Field>
+          <Field label="Phone"><input value={f.phone ?? ''} onChange={e => setF((p: any) => ({ ...p, phone: e.target.value }))} className="input" /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Profession"><input value={f.profession ?? ''} onChange={e => setF(p => ({ ...p, profession: e.target.value }))} className="input" /></Field>
-          <Field label="Organization"><input value={f.organization ?? ''} onChange={e => setF(p => ({ ...p, organization: e.target.value }))} className="input" /></Field>
+          <Field label="Profession"><input value={f.profession ?? ''} onChange={e => setF((p: any) => ({ ...p, profession: e.target.value }))} className="input" /></Field>
+          <Field label="Organization"><input value={f.organization ?? ''} onChange={e => setF((p: any) => ({ ...p, organization: e.target.value }))} className="input" /></Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Education"><input value={f.education ?? ''} onChange={e => setF(p => ({ ...p, education: e.target.value }))} className="input" /></Field>
-          <Field label="Location"><input value={f.location ?? ''} onChange={e => setF(p => ({ ...p, location: e.target.value }))} className="input" /></Field>
+          <Field label="Education"><input value={f.education ?? ''} onChange={e => setF((p: any) => ({ ...p, education: e.target.value }))} className="input" /></Field>
+          <Field label="Location"><input value={f.location ?? ''} onChange={e => setF((p: any) => ({ ...p, location: e.target.value }))} className="input" /></Field>
         </div>
-        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.is_deceased ?? false} onChange={e => setF(p => ({ ...p, is_deceased: e.target.checked }))} /> Mark as deceased</label>
-        <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => setF(p => ({ ...p, profile_image: url }))} />
+        <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={f.is_deceased ?? false} onChange={e => setF((p: any) => ({ ...p, is_deceased: e.target.checked }))} /> Mark as deceased</label>
+        <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => setF((p: any) => ({ ...p, profile_image: url }))} />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div className="flex gap-3"><button type="submit" disabled={loading} className="btn-primary">{loading ? 'Saving...' : 'Save Changes'}</button><button type="button" onClick={() => router.back()} className="btn-secondary">Cancel</button></div>
       </form>
