@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
 interface Props {
   members: Array<{ id: string; first_name: string; last_name: string }>;
@@ -68,18 +69,17 @@ export function MemberPopup({ members, currentIndex, onClose, onNavigate }: Prop
                 {m.blood_group && <span className="badge" style={{ fontSize: '0.65rem', background: 'rgba(196,155,74,0.12)', color: 'var(--color-accent)' }}>{m.blood_group}</span>}
                 {m.is_deceased && <span className="badge" style={{ fontSize: '0.65rem', background: 'rgba(196,85,77,0.12)', color: 'var(--color-danger)' }}>Deceased</span>}
               </div>
-              {/* Social links */}
-              {(m.whatsapp || m.email || m.phone || m.facebook || m.instagram || m.linkedin || m.twitter) && (
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.75rem' }}>
-                  {m.email && <a href={`mailto:${m.email}`} title="Email" style={{ color: 'var(--color-text-muted)', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>✉</a>}
-                  {m.phone && <a href={`tel:${m.phone}`} title="Phone" style={{ color: 'var(--color-text-muted)', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>📞</a>}
-                  {m.whatsapp && <a href={`https://wa.me/${m.whatsapp.replace(/\D/g,'')}`} target="_blank" title="WhatsApp" style={{ color: '#25D366', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>💬</a>}
-                  {m.facebook && <a href={m.facebook} target="_blank" title="Facebook" style={{ color: '#1877F2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>f</a>}
-                  {m.instagram && <a href={m.instagram} target="_blank" title="Instagram" style={{ color: '#E4405F', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>📷</a>}
-                  {m.linkedin && <a href={m.linkedin} target="_blank" title="LinkedIn" style={{ color: '#0A66C2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>in</a>}
-                  {m.twitter && <a href={m.twitter} target="_blank" title="Twitter" style={{ color: '#1DA1F2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>𝕏</a>}
-                </div>
-              )}
+              {/* Social + Edit links */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '0.75rem' }}>
+                {m.email && <a href={`mailto:${m.email}`} title="Email" style={{ color: 'var(--color-text-muted)', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>✉</a>}
+                {m.phone && <a href={`tel:${m.phone}`} title="Phone" style={{ color: 'var(--color-text-muted)', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>📞</a>}
+                {m.whatsapp && <a href={`https://wa.me/${m.whatsapp.replace(/\D/g,'')}`} target="_blank" title="WhatsApp" style={{ color: '#25D366', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>💬</a>}
+                {m.facebook && <a href={m.facebook} target="_blank" title="Facebook" style={{ color: '#1877F2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>f</a>}
+                {m.instagram && <a href={m.instagram} target="_blank" title="Instagram" style={{ color: '#E4405F', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>📷</a>}
+                {m.linkedin && <a href={m.linkedin} target="_blank" title="LinkedIn" style={{ color: '#0A66C2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>in</a>}
+                {m.twitter && <a href={m.twitter} target="_blank" title="Twitter" style={{ color: '#1DA1F2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>𝕏</a>}
+                <Link href={`/members/${memberId}/edit`} title="Edit Profile" style={{ color: 'white', background: 'var(--color-primary)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)', fontSize: '0.7rem', fontWeight: 700 }} onClick={e => e.stopPropagation()}>✎</Link>
+              </div>
             </div>
 
             {/* Info grid: 2 columns */}
