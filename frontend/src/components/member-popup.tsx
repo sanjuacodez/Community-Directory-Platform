@@ -63,7 +63,10 @@ export function MemberPopup({ members, currentIndex, onClose, onNavigate }: Prop
               ) : (
                 <div className={`avatar avatar-lg ${m.gender === 'male' ? 'gender-male' : m.gender === 'female' ? 'gender-female' : 'gender-other'}`} style={{ margin: '0 auto', width: 80, height: 80, fontSize: '1.5rem', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}>{m.first_name?.[0]}{m.last_name?.[0]}</div>
               )}
-              <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 700, margin: '0.75rem 0 0' }}>{m.first_name} {m.last_name}</h2>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 700, margin: 0 }}>{m.first_name} {m.last_name}</h2>
+                <Link href={`/members/${memberId}/edit`} title="Edit Profile" style={{ color: 'white', background: 'var(--color-primary)', borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)', fontSize: '0.6rem', fontWeight: 700, flexShrink: 0 }} onClick={e => e.stopPropagation()}>✎</Link>
+              </div>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '0.35rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
                 <span className="badge capitalize" style={{ fontSize: '0.65rem' }}>{m.gender}</span>
                 {m.blood_group && <span className="badge" style={{ fontSize: '0.65rem', background: 'rgba(196,155,74,0.12)', color: 'var(--color-accent)' }}>{m.blood_group}</span>}
@@ -78,7 +81,6 @@ export function MemberPopup({ members, currentIndex, onClose, onNavigate }: Prop
                 {m.instagram && <a href={m.instagram} target="_blank" title="Instagram" style={{ color: '#E4405F', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>📷</a>}
                 {m.linkedin && <a href={m.linkedin} target="_blank" title="LinkedIn" style={{ color: '#0A66C2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>in</a>}
                 {m.twitter && <a href={m.twitter} target="_blank" title="Twitter" style={{ color: '#1DA1F2', background: 'var(--color-bg)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)' }} onClick={e => e.stopPropagation()}>𝕏</a>}
-                <Link href={`/members/${memberId}/edit`} title="Edit Profile" style={{ color: 'white', background: 'var(--color-primary)', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', boxShadow: 'var(--shadow-sm)', fontSize: '0.7rem', fontWeight: 700 }} onClick={e => e.stopPropagation()}>✎</Link>
               </div>
             </div>
 
