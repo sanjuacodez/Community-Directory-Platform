@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
 import { ImageUpload } from '@/components/image-upload';
+import { QuickAddMember } from '@/components/quick-add-member';
 
 const BLOOD = ['', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -29,6 +30,8 @@ export default function CreateMemberPage() {
   const [motherId, setMotherId] = useState('');
   const [spouseId, setSpouseId] = useState('');
   const [error, setError] = useState(''); const [loading, setLoading] = useState(false);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [quickAddType, setQuickAddType] = useState('');
 
   useEffect(() => { supabase.from('communities').select('id,name').then(({ data }) => setCommunities((data as any) ?? [])); supabase.from('families').select('id,name,community_id').then(({ data }) => setFamilies((data as any) ?? [])); supabase.from('members').select('id,first_name,last_name,gender,family_id').neq('status', 'deleted').then(({ data }) => setExistingMembers((data as any) ?? [])); }, []);
 
@@ -47,6 +50,13 @@ export default function CreateMemberPage() {
       if (relationships.length > 0) await supabase.from('member_relationships').insert(relationships);
       router.push('/members');
     } catch (err: any) { setError(err.message); } finally { setLoading(false); }
+  };
+
+  const handleQuickCreated = (newMember: any) => { setShowQuickAdd(false);
+    if (quickAddType === 'father') setFatherId(newMember.id);
+    else if (quickAddType === 'mother') setMotherId(newMember.id);
+    else if (quickAddType === 'spouse') setSpouseId(newMember.id);
+    supabase.from('members').select('id,first_name,last_name,gender,family_id').neq('status', 'deleted').then(({ data }) => setExistingMembers((data as any) ?? []));
   };
 
   return (
@@ -97,13 +107,28 @@ export default function CreateMemberPage() {
           </div>
         </Section>
 
-        {f.family_id && familyMembers.length > 0 && (
+        {f.family_id && (
           <Section title="Family Connections">
-            <p style={{fontSize:'var(--font-size-xs)',color:'var(--color-text-muted)',marginTop:0,marginBottom:'0.75rem'}}>Link this member to existing family members.</p>
+            <p style={{fontSize:'var(--font-size-xs)',color:'var(--color-text-muted)',marginTop:0,marginBottom:'0.75rem'}}>Link this member to existing family members. If the person is not added yet, click '+ New' to quickly create them.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <Field label="Father"><select value={fatherId} onChange={e => setFatherId(e.target.value)} className="input"><option value="">None</option>{familyMembers.filter(m => m.gender === 'male').map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}</select></Field>
-              <Field label="Mother"><select value={motherId} onChange={e => setMotherId(e.target.value)} className="input"><option value="">None</option>{familyMembers.filter(m => m.gender === 'female').map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}</select></Field>
-              <Field label="Spouse"><select value={spouseId} onChange={e => setSpouseId(e.target.value)} className="input"><option value="">None</option>{familyMembers.map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}</select></Field>
+              <Field label="Father">
+                <div style={{display:'flex',gap:'0.25rem'}}>
+                  <select value={fatherId} onChange={e => setFatherId(e.target.value)} className="input"><option value="">None</option>{familyMembers.filter(m => m.gender === 'male').map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}</select>
+                  <button type="button" onClick={() => { setQuickAddType('father'); setShowQuickAdd(true); }} className="btn btn-outline btn-sm" title="Quick add father" style={{flexShrink:0,fontSize:'0.7rem'}}>+ New</button>
+                </div>
+              </Field>
+              <Field label="Mother">
+                <div style={{display:'flex',gap:'0.25rem'}}>
+                  <select value={motherId} onChange={e => setMotherId(e.target.value)} className="input"><option value="">None</option>{familyMembers.filter(m => m.gender === 'female').map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}</select>
+                  <button type="button" onClick={() => { setQuickAddType('mother'); setShowQuickAdd(true); }} className="btn btn-outline btn-sm" title="Quick add mother" style={{flexShrink:0,fontSize:'0.7rem'}}>+ New</button>
+                </div>
+              </Field>
+              <Field label="Spouse">
+                <div style={{display:'flex',gap:'0.25rem'}}>
+                  <select value={spouseId} onChange={e => setSpouseId(e.target.value)} className="input"><option value="">None</option>{familyMembers.map(m => <option key={m.id} value={m.id}>{m.first_name} {m.last_name}</option>)}</select>
+                  <button type="button" onClick={() => { setQuickAddType('spouse'); setShowQuickAdd(true); }} className="btn btn-outline btn-sm" title="Quick add spouse" style={{flexShrink:0,fontSize:'0.7rem'}}>+ New</button>
+                </div>
+              </Field>
             </div>
           </Section>
         )}
@@ -123,6 +148,14 @@ export default function CreateMemberPage() {
           <button type="submit" disabled={loading} className="btn btn-primary">{loading ? 'Creating...' : 'Create Member'}</button>
         </div>
       </form>
+      {showQuickAdd && (
+        <QuickAddMember
+          communityId={f.community_id}
+          familyId={f.family_id}
+          onCreated={handleQuickCreated}
+          onClose={() => setShowQuickAdd(false)}
+        />
+      )}
     </div>
   );
 }
