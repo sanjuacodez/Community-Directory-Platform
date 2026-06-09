@@ -1,97 +1,151 @@
 'use client';
 
-import { useRef, useState, useCallback, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useCallback, useMemo } from 'react';
+import { MemberPopup } from './member-popup';
 
 interface Member {
   id: string; first_name: string; last_name: string; gender: string;
-  blood_group?: string; profession?: string; location?: string;
-  father_id?: string; mother_id?: string; spouse_ids?: string[]; children_ids?: string[];
+  blood_group?: string; profession?: string; location?: string; profile_image?: string;
 }
+
+interface Relation { member_id: string; related_member_id: string; relationship_type: string; }
 
 interface TreeNode {
-  member: Member;
-  x: number; y: number;
-  children: TreeNode[];
-  spouse?: TreeNode;
+  id: string; member: Member; spouse?: Member;
+  children: TreeNode[]; level: number; index: number;
 }
 
-interface Props {
-  members: Member[];
-  relationships: { member_id: string; related_member_id: string; relationship_type: string }[];
-}
+export function FamilyTree({ members, relationships }: { members: Member[]; relationships: Relation[] }) {
+  const [scale, setScale] = useState(1); const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false); const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [popupId, setPopupId] = useState<string | null>(null);
 
-export function FamilyTree({ members, relationships }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [dragging, setDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [selected, setSelected] = useState<string | null>(null);
-
-  // Build the tree structure
-  const buildTree = useCallback((): TreeNode[] => {
+  const tree = useMemo(() => {
     const memberMap = new Map(members.map(m => [m.id, m]));
-    const relMap = new Map<string, { father?: string; mother?: string; spouse?: string; children: string[] }>();
+    const childSet = new Set(relationships.filter(r => r.relationship_type === 'child').map(r => r.related_member_id));
+    const parentSet = new Set(relationships.filter(r => r.relationship_type === 'father' || r.relationship_type === 'mother').map(r => r.related_member_id));
 
-    members.forEach(m => { relMap.set(m.id, { children: [] }); });
-    relationships.forEach(r => {
-      const rel = relMap.get(r.member_id);
-      if (!rel) return;
-      if (r.relationship_type === 'father') rel.father = r.related_member_id;
-      if (r.relationship_type === 'mother') rel.mother = r.related_member_id;
-      if (r.relationship_type === 'spouse') rel.spouse = r.related_member_id;
-      if (r.relationship_type === 'child') rel.children.push(r.related_member_id);
-    });
+    // Roots: people who are parents but NOT children of anyone in our data
+    const roots = [...parentSet].filter(id => !childSet.has(id)).map(id => memberMap.get(id)).filter(Boolean) as Member[];
+    const visited = new Set<string>();
 
-    // Find root: members who are fathers/mothers but not children of anyone
-    const childIds = new Set(relationships.filter(r => r.relationship_type === 'child').map(r => r.related_member_id));
-    const fatherIds = new Set(relationships.filter(r => r.relationship_type === 'father').map(r => r.related_member_id));
-    const motherIds = new Set(relationships.filter(r => r.relationship_type === 'mother').map(r => r.related_member_id));
+    const getSpouse = (memberId: string): Member | undefined => {
+      const rel = relationships.find(r => r.member_id === memberId && r.relationship_type === 'spouse');
+      return rel ? memberMap.get(rel.related_member_id) : undefined;
+    };
 
-    // Roots are those with relationships but not children of anyone in this set
-    const roots = members.filter(m => {
-      const hasRel = relationships.some(r => r.member_id === m.id || r.related_member_id === m.id);
-      const isChild = childIds.has(m.id);
-      return hasRel && !isChild;
-    });
+    const getChildren = (memberId: string): Member[] => {
+      return relationships
+        .filter(r => r.member_id === memberId && r.relationship_type === 'child')
+        .map(r => memberMap.get(r.related_member_id))
+        .filter(Boolean) as Member[];
+    };
 
-    if (roots.length === 0) return [];
-
-    const buildNode = (memberId: string, level: number, siblingIndex: number): TreeNode | null => {
-      const member = memberMap.get(memberId);
-      if (!member) return null;
-      const rel = relMap.get(memberId);
-      const children = (rel?.children || []).map((cid, i) => buildNode(cid, level + 1, i)).filter(Boolean) as TreeNode[];
-
-      const spouseId = rel?.spouse;
-      const spouse = spouseId ? memberMap.get(spouseId) : undefined;
-
+    const buildNode = (member: Member, level: number, index: number): TreeNode | null => {
+      if (visited.has(member.id)) return null;
+      visited.add(member.id);
+      const spouse = getSpouse(member.id);
+      const children = getChildren(member.id);
       return {
-        member,
-        x: siblingIndex * 200,
-        y: level * 120,
-        children,
-        spouse: spouse && !children.some(c => c.member.id === spouse.id) ? { member: spouse, x: siblingIndex * 200 + 160, y: level * 120, children: [] } : undefined,
+        id: member.id, member, level, index,
+        spouse: spouse ? { ...spouse } : undefined,
+        children: children.map((c, i) => buildNode(c, level + 1, i)).filter(Boolean) as TreeNode[],
       };
     };
 
-    return roots.map((r, i) => buildNode(r.id, 0, i)).filter(Boolean) as TreeNode[];
+    return roots.map((r, i) => buildNode(r, 0, i)).filter(Boolean) as TreeNode[];
   }, [members, relationships]);
 
-  const tree = buildTree();
+  if (tree.length === 0) {
+    return <div className="card" style={{ padding: '3rem', textAlign: 'center' }}>
+      <p style={{ color: 'var(--color-text-muted)' }}>No family relationships to display. Add relationships from member profiles.</p>
+    </div>;
+  }
 
-  // Pan and zoom handlers
+  const NODE_W = 160; const NODE_H = 80; const LEVEL_H = 130; const SIBLING_GAP = 60;
+
+  const renderLines = (node: TreeNode, px: number, py: number): React.ReactNode[] => {
+    const lines: React.ReactNode[] = [];
+    const children = node.children;
+    if (children.length === 0) return lines;
+
+    const totalWidth = children.length * (NODE_W + SIBLING_GAP) - SIBLING_GAP;
+    const startX = px - totalWidth / 2 + NODE_W / 2;
+    const parentCenterX = px;
+    const parentBottom = py + NODE_H;
+
+    children.forEach((child, i) => {
+      const cx = startX + i * (NODE_W + SIBLING_GAP);
+      const cy = py + LEVEL_H;
+      const childTop = cy;
+      const midY = (parentBottom + childTop) / 2;
+      lines.push(
+        <g key={`lines-${child.id}`}>
+          <line x1={parentCenterX} y1={parentBottom} x2={parentCenterX} y2={midY} stroke="var(--color-border)" strokeWidth="1.5" />
+          <line x1={parentCenterX} y1={midY} x2={cx} y2={midY} stroke="var(--color-border)" strokeWidth="1.5" />
+          <line x1={cx} y1={midY} x2={cx} y2={childTop} stroke="var(--color-border)" strokeWidth="1.5" />
+        </g>
+      );
+      lines.push(...renderLines(child, cx, cy));
+    });
+    return lines;
+  };
+
+  const renderNode = (node: TreeNode, x: number, y: number): React.ReactNode[] => {
+    const nodes: React.ReactNode[] = [];
+    const m = node.member;
+    nodes.push(
+      <g key={node.id}>
+        <rect x={x - NODE_W / 2} y={y} width={NODE_W} height={NODE_H} rx="8" fill="var(--color-surface)" stroke="var(--color-border)" strokeWidth="2" style={{ cursor: 'pointer' }} onClick={() => setPopupId(m.id)} />
+        {m.profile_image ? (
+          <clipPath id={`clip-${m.id}`}><rect x={x - NODE_W / 2 + 8} y={y + 8} width="28" height="28" rx="14" /></clipPath>
+        ) : null}
+        {m.profile_image ? (
+          <image href={m.profile_image} x={x - NODE_W / 2 + 8} y={y + 8} width="28" height="28" clipPath={`url(#clip-${m.id})`} preserveAspectRatio="xMidYMid slice" />
+        ) : (
+          <>
+            <circle cx={x - NODE_W / 2 + 22} cy={y + 22} r="14" fill="var(--color-primary)" />
+            <text x={x - NODE_W / 2 + 22} y={y + 26} textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">{m.first_name?.[0]}{m.last_name?.[0]}</text>
+          </>
+        )}
+        <text x={x - NODE_W / 2 + 44} y={y + 18} fill="var(--color-text)" fontSize="11" fontWeight="600">{m.first_name} {m.last_name}</text>
+        <text x={x - NODE_W / 2 + 44} y={y + 33} fill="var(--color-text-muted)" fontSize="9" className="capitalize">{m.gender}{m.blood_group ? ` · ${m.blood_group}` : ''}</text>
+        {m.profession && <text x={x - NODE_W / 2 + 44} y={y + 47} fill="var(--color-text-muted)" fontSize="8">{m.profession}</text>}
+        <text x={x - NODE_W / 2 + 44} y={m.profession ? y + 60 : y + 47} fill="var(--color-accent)" fontSize="8">More info →</text>
+      </g>
+    );
+
+    const totalWidth = node.children.length * (NODE_W + SIBLING_GAP) - SIBLING_GAP;
+    const startX = x - totalWidth / 2 + NODE_W / 2;
+    node.children.forEach((child, i) => {
+      nodes.push(...renderNode(child, startX + i * (NODE_W + SIBLING_GAP), y + LEVEL_H));
+    });
+
+    // Spouse
+    if (node.spouse && !node.children.some(c => c.id === node.spouse!.id)) {
+      const sx = x + NODE_W + 30;
+      nodes.push(
+        <g key={`spouse-${node.id}`}>
+          <line x1={x + NODE_W / 2} y1={y + NODE_H / 2} x2={sx - NODE_W / 2} y2={y + NODE_H / 2} stroke="var(--color-accent)" strokeWidth="1.5" strokeDasharray="4 2" />
+          <rect x={sx - NODE_W / 2} y={y} width={NODE_W} height={NODE_H} rx="8" fill="var(--color-surface)" stroke="var(--color-accent)" strokeWidth="1.5" style={{ cursor: 'pointer' }} onClick={() => setPopupId(node.spouse!.id)} />
+          <circle cx={sx - NODE_W / 2 + 22} cy={y + 22} r="14" fill="var(--color-accent)" />
+          <text x={sx - NODE_W / 2 + 22} y={y + 26} textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">{node.spouse.first_name?.[0]}{node.spouse.last_name?.[0]}</text>
+          <text x={sx - NODE_W / 2 + 44} y={y + 22} fill="var(--color-text)" fontSize="10" fontWeight="500">{node.spouse.first_name} {node.spouse.last_name}</text>
+          <text x={sx - NODE_W / 2 + 44} y={y + 38} fill="var(--color-accent)" fontSize="8">Spouse</text>
+        </g>
+      );
+    }
+
+    return nodes;
+  };
+
   const handleWheel = useCallback((e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.1 : 0.1;
-    setScale(s => Math.max(0.2, Math.min(3, s + delta)));
+    e.preventDefault(); setScale(s => Math.max(0.2, Math.min(3, s + (e.deltaY > 0 ? -0.1 : 0.1))));
   }, []);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (e.target === containerRef.current || (e.target as HTMLElement).dataset.panArea) {
-      setDragging(true);
-      setDragStart({ x: e.clientX - pos.x, y: e.clientY - pos.y });
+    if (e.target === e.currentTarget || (e.target as HTMLElement).tagName === 'svg') {
+      setDragging(true); setDragStart({ x: e.clientX - pos.x, y: e.clientY - pos.y });
     }
   }, [pos]);
 
@@ -99,131 +153,34 @@ export function FamilyTree({ members, relationships }: Props) {
     if (dragging) setPos({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
   }, [dragging, dragStart]);
 
-  const handleMouseUp = useCallback(() => { setDragging(false); }, []);
-
-  if (tree.length === 0) {
-    return <div className="card" style={{ padding: '3rem', textAlign: 'center' }}><p style={{ color: 'var(--color-text-muted)' }}>No family relationships to display. Add relationships from member profiles to build the tree.</p></div>;
-  }
-
-  const renderNode = (node: TreeNode) => {
-    const m = node.member;
-    return (
-      <div key={m.id} style={{ position: 'absolute', left: node.x, top: node.y }}>
-        {/* Lines to children */}
-        {node.children.map((child, i) => {
-          const childX = child.x + 80;
-          const childY = child.y;
-          const parentX = node.x + 80;
-          const parentY = node.y + 70;
-          return (
-            <svg key={`line-${i}`} style={{ position: 'absolute', left: 0, top: 0, width: Math.abs(childX - parentX) + 200, height: Math.abs(childY - parentY) + 10, pointerEvents: 'none', overflow: 'visible' }}>
-              <path d={`M 80 70 L 80 ${(childY - parentY) / 2 + 70} L ${childX - node.x} ${(childY - parentY) / 2 + 70} L ${childX - node.x} ${childY - node.y}`} stroke="var(--color-border)" strokeWidth="1.5" fill="none" />
-            </svg>
-          );
-        })}
-
-        {/* Node card */}
-        <Link
-          href={`/members/${m.id}`}
-          onClick={(e) => { setSelected(m.id); e.preventDefault(); }}
-          style={{
-            display: 'flex', alignItems: 'center', gap: '0.5rem',
-            padding: '0.5rem 0.75rem',
-            background: selected === m.id ? 'var(--color-primary)' : 'var(--color-surface)',
-            color: selected === m.id ? 'white' : 'var(--color-text)',
-            border: '2px solid ' + (selected === m.id ? 'var(--color-primary)' : 'var(--color-border)'),
-            borderRadius: 'var(--radius)',
-            cursor: 'pointer', textDecoration: 'none',
-            whiteSpace: 'nowrap', fontSize: 'var(--font-size-xs)',
-            boxShadow: selected === m.id ? '0 4px 12px rgba(0,0,0,0.15)' : 'none',
-            zIndex: selected === m.id ? 10 : 1,
-          }}
-          title={`${m.first_name} ${m.last_name}${m.profession ? ' · ' + m.profession : ''}${m.location ? ' · ' + m.location : ''}`}
-        >
-          <div className="avatar" style={{ width: 32, height: 32, fontSize: '0.75rem' }}>{m.first_name?.[0]}{m.last_name?.[0]}</div>
-          <div>
-            <div style={{ fontWeight: 600 }}>{m.first_name} {m.last_name}</div>
-            {m.blood_group && <div style={{ fontSize: '0.65rem', opacity: 0.7 }}>{m.blood_group}</div>}
-          </div>
-        </Link>
-
-        {/* Spouse */}
-        {node.spouse && (
-          <div style={{ position: 'absolute', left: 160, top: 0 }}>
-            <svg style={{ position: 'absolute', left: -80, top: 35, pointerEvents: 'none', overflow: 'visible' }}>
-              <line x1={0} y1={0} x2={80} y2={0} stroke="var(--color-accent)" strokeWidth="1.5" strokeDasharray="4 2" />
-            </svg>
-            <Link
-              href={`/members/${node.spouse.member.id}`}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '0.25rem',
-                padding: '0.35rem 0.5rem',
-                background: 'var(--color-surface)',
-                border: '1.5px solid var(--color-accent)',
-                borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer', textDecoration: 'none',
-                fontSize: '0.7rem',
-              }}
-            >
-              <span className="avatar" style={{ width: 24, height: 24, fontSize: '0.6rem' }}>{node.spouse.member.first_name?.[0]}{node.spouse.member.last_name?.[0]}</span>
-              {node.spouse.member.first_name}
-            </Link>
-          </div>
-        )}
-
-        {/* Recursively render children */}
-        {node.children.map(renderNode)}
-      </div>
-    );
-  };
-
-  // Calculate bounds
-  const allNodes = (roots: TreeNode[]): TreeNode[] => roots.flatMap(r => [r, r.spouse, ...allNodes(r.children)].filter(Boolean)) as TreeNode[];
-  const nodes = allNodes(tree);
-  const maxX = Math.max(...nodes.map(n => n.x + 200), 400);
-  const maxY = Math.max(...nodes.map(n => n.y + 150), 300);
-  const minX = Math.min(...nodes.map(n => n.x), 0) - 50;
+  const allLines = tree.flatMap(t => renderLines(t, 0, 0));
+  const allNodes = tree.flatMap((t, i) => renderNode(t, i * (NODE_W * 2 + SIBLING_GAP), 20));
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div>
       <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-        <button onClick={() => setScale(s => Math.min(3, s + 0.2))} className="btn btn-outline btn-sm" title="Zoom in">🔍+</button>
-        <button onClick={() => setScale(s => Math.max(0.2, s - 0.2))} className="btn btn-outline btn-sm" title="Zoom out">🔍-</button>
-        <button onClick={() => { setScale(1); setPos({ x: 0, y: 0 }); }} className="btn btn-ghost btn-sm" title="Reset view">↺ Reset</button>
-        {selected && (
-          <Link href={`/members/${selected}`} className="btn btn-primary btn-sm">View Full Profile →</Link>
-        )}
+        <button onClick={() => setScale(s => Math.min(3, s + 0.2))} className="btn btn-outline btn-sm">🔍+</button>
+        <button onClick={() => setScale(s => Math.max(0.2, s - 0.2))} className="btn btn-outline btn-sm">🔍-</button>
+        <button onClick={() => { setScale(1); setPos({ x: 0, y: 0 }); }} className="btn btn-ghost btn-sm">↺ Reset</button>
+        <span style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', padding: '0.375rem 0' }}>Click any member for details</span>
       </div>
 
       <div
-        ref={containerRef}
-        data-pan-area="true"
-        onWheel={handleWheel}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        style={{
-          position: 'relative', overflow: 'hidden',
-          height: 500,
-          border: '2px dashed var(--color-border)',
-          borderRadius: 'var(--radius)',
-          cursor: dragging ? 'grabbing' : 'grab',
-          background: 'var(--color-bg)',
-        }}
+        onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove}
+        onMouseUp={() => setDragging(false)} onMouseLeave={() => setDragging(false)}
+        style={{ position: 'relative', overflow: 'hidden', height: 500, border: '2px dashed var(--color-border)', borderRadius: 'var(--radius)', cursor: dragging ? 'grabbing' : 'grab', background: 'var(--color-bg)' }}
       >
-        <div style={{
-          transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
-          transformOrigin: '0 0',
-          position: 'absolute',
-          width: maxX - minX + 100,
-          height: maxY + 50,
-          left: Math.abs(minX) + 20,
-          top: 20,
-        }}>
-          {tree.map(renderNode)}
+        <div style={{ transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`, transformOrigin: '0 0' }}>
+          <svg width={3000} height={3000} style={{ position: 'absolute', top: 0, left: 0 }}>{allLines}</svg>
+          <svg width={3000} height={3000} style={{ position: 'absolute', top: 0, left: 0, pointerEvents: 'none' }}>{allNodes}</svg>
+          {/* Clickable overlay for nodes */}
+          <div style={{ position: 'absolute', top: 0, left: 0, width: 3000, height: 3000, pointerEvents: 'none' }}>
+            {/* The actual clickable areas are in the SVG rect elements which handle clicks via onClick */}
+          </div>
         </div>
       </div>
+
+      {popupId && <MemberPopup memberId={popupId} onClose={() => setPopupId(null)} />}
     </div>
   );
 }
