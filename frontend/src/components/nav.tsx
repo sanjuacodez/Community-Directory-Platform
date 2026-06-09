@@ -23,16 +23,14 @@ export function Nav() {
           <span className="hidden sm:inline">CommunityHub</span>
         </Link>
 
-        {/* Desktop: all links visible */}
+        {/* Desktop nav */}
         <div className="hidden lg:flex items-center gap-1">
-          {links.map(l => (
-            <Link key={l.href} href={l.href} className="px-2 py-1.5 rounded text-sm font-medium hover:bg-black/5 transition-colors" style={{ color: 'var(--color-text)' }}>
-              {l.label}
-            </Link>
+          <Link href="/members" className="px-2 py-1.5 rounded text-sm font-medium hover:bg-black/5 transition-colors" style={{ color: 'var(--color-text)' }}>Members</Link>
+          {user && links.map(l => (
+            <Link key={l.href} href={l.href} className="px-2 py-1.5 rounded text-sm font-medium hover:bg-black/5 transition-colors" style={{ color: 'var(--color-text)' }}>{l.label}</Link>
           ))}
         </div>
 
-        {/* Right side: user menu */}
         <div className="hidden lg:flex items-center gap-2">
           {user ? (
             <>

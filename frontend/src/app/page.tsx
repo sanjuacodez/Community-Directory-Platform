@@ -49,9 +49,7 @@ export default function HomePage() {
           Manage families, members, and stay connected with your community.
         </p>
         <div className="flex flex-wrap justify-center gap-2" style={{ marginTop: '1.25rem' }}>
-          <Link href="/families" className="btn btn-primary btn-sm">Families</Link>
-          <Link href="/members" className="btn btn-outline btn-sm">Members</Link>
-          <Link href="/directory" className="btn btn-outline btn-sm">Directory</Link>
+          <Link href="/members" className="btn btn-primary btn-sm">Members</Link>
         </div>
       </div>
 
