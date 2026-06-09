@@ -16,28 +16,23 @@ export default function MembersPage() {
   const [communities, setCommunities] = useState<any[]>([]);
   const [families, setFamilies] = useState<any[]>([]);
   const [relationships, setRelationships] = useState<any[]>([]);
-  const [filters, setFilters] = useState({ communityIds: [] as string[], familyIds: [] as string[], search: '', bloodGroup: '', profession: '', location: '' });
+  const [filters, setFilters] = useState({ communityId: '', familyId: '', search: '', bloodGroup: '', profession: '', location: '' });
   const [page, setPage] = useState(1); const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true); const [view, setView] = useState<ViewMode>('grid');
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
     supabase.from('communities').select('id,name').then(({ data }) => setCommunities((data as any) ?? []));
-    supabase.from('families').select('id,name').then(({ data }) => setFamilies((data as any) ?? []));
+    supabase.from('families').select('id,name,community_id').then(({ data }) => setFamilies((data as any) ?? []));
     supabase.from('member_relationships').select('*').then(({ data }) => setRelationships((data as any) ?? []));
   }, []);
-
-  const toggleFilter = (key: 'communityIds' | 'familyIds', id: string) => {
-    setFilters(p => ({ ...p, [key]: (p[key] as string[]).includes(id) ? (p[key] as string[]).filter(i => i !== id) : [...(p[key] as string[]), id] }));
-    setPage(1);
-  };
 
   useEffect(() => {
     setLoading(true);
     let q = supabase.from('members').select('*, family:families(id,name), community:communities(id,name)', { count: 'exact' }).neq('status', 'deleted');
     // Only apply in() when there are values — empty array breaks Supabase
-    if (filters.communityIds.length > 0) q = q.in('community_id', filters.communityIds);
-    if (filters.familyIds.length > 0) q = q.in('family_id', filters.familyIds);
+    if (filters.communityId) q = q.eq('community_id', filters.communityId);
+    if (filters.familyId) q = q.eq('family_id', filters.familyId);
     if (filters.search) q = q.or(`first_name.ilike.%${filters.search}%,last_name.ilike.%${filters.search}%`);
     if (filters.bloodGroup) q = q.eq('blood_group', filters.bloodGroup);
     if (filters.profession) q = q.ilike('profession', `%${filters.profession}%`);
@@ -55,7 +50,7 @@ export default function MembersPage() {
   }, [members, relationships]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-  const filterCount = filters.communityIds.length + filters.familyIds.length + (filters.bloodGroup ? 1 : 0) + (filters.profession ? 1 : 0) + (filters.location ? 1 : 0);
+  const filterCount = (filters.communityId ? 1 : 0) + (filters.familyId ? 1 : 0) + (filters.bloodGroup ? 1 : 0) + (filters.profession ? 1 : 0) + (filters.location ? 1 : 0);
 
   const MemberCard = ({ m }: { m: any }) => (
     <div className="card" style={{ padding: '0.75rem', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
@@ -98,47 +93,33 @@ export default function MembersPage() {
 
       {/* Collapsible filters */}
       {showFilters && (
-        <div className="card" style={{ padding: '0.75rem', marginBottom: '0.75rem' }}>
+        <div className="card" style={{ padding: '1rem', marginBottom: '0.75rem' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'flex-start' }}>
-            {/* Multi-select communities */}
-            <div style={{ minWidth: 160 }}>
-              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Communities</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
-                {communities.map(c => (
-                  <button key={c.id} onClick={() => toggleFilter('communityIds', c.id)}
-                    className={`btn btn-sm ${filters.communityIds.includes(c.id) ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: 'var(--font-size-xs)' }}>
-                    {c.name} {filters.communityIds.includes(c.id) ? '✓' : ''}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Multi-select families */}
-            <div style={{ minWidth: 160 }}>
-              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Families</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem', maxHeight: 120, overflowY: 'auto' }}>
-                {families.map(f => (
-                  <button key={f.id} onClick={() => toggleFilter('familyIds', f.id)}
-                    className={`btn btn-sm ${filters.familyIds.includes(f.id) ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: 'var(--font-size-xs)' }}>
-                    {f.name} {filters.familyIds.includes(f.id) ? '✓' : ''}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ minWidth: 120 }}>
-              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Blood Group</span>
-              <select value={filters.bloodGroup} onChange={e => { setFilters(p => ({ ...p, bloodGroup: e.target.value })); setPage(1); }} className="input" style={{ padding: '0.25rem 0.5rem', fontSize: 'var(--font-size-xs)' }}>
-                <option value="">All</option>{BLOOD.filter(Boolean).map(b => <option key={b} value={b}>{b}</option>)}
+            <div style={{ minWidth: 180 }}>
+              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Community</span>
+              <select value={filters.communityId} onChange={e => { setFilters(p => ({ ...p, communityId: e.target.value, familyId: '' })); setPage(1); }} className="input">
+                <option value="">All Communities</option>
+                {communities.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
-            <div style={{ minWidth: 120 }}>
-              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Profession</span>
-              <input placeholder="Filter..." value={filters.profession} onChange={e => { setFilters(p => ({ ...p, profession: e.target.value })); setPage(1); }} className="input" style={{ padding: '0.25rem 0.5rem', fontSize: 'var(--font-size-xs)' }} />
+            <div style={{ minWidth: 180 }}>
+              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Family</span>
+              <select value={filters.familyId} onChange={e => { setFilters(p => ({ ...p, familyId: e.target.value })); setPage(1); }} className="input">
+                <option value="">All Families</option>
+                {families.filter(f => !filters.communityId || f.community_id === filters.communityId).map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
+              </select>
             </div>
-            <div style={{ minWidth: 120 }}>
+            <div style={{ minWidth: 130 }}>
+              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Blood Group</span>
+              <select value={filters.bloodGroup} onChange={e => { setFilters(p => ({ ...p, bloodGroup: e.target.value })); setPage(1); }} className="input">{['All', ...BLOOD.filter(Boolean)].map(b => <option key={b} value={b === 'All' ? '' : b}>{b}</option>)}</select>
+            </div>
+            <div style={{ minWidth: 140 }}>
+              <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Profession</span>
+              <input placeholder="Filter..." value={filters.profession} onChange={e => { setFilters(p => ({ ...p, profession: e.target.value })); setPage(1); }} className="input" />
+            </div>
+            <div style={{ minWidth: 140 }}>
               <span className="section-title" style={{ display: 'block', marginBottom: '0.25rem' }}>Location</span>
-              <input placeholder="Filter..." value={filters.location} onChange={e => { setFilters(p => ({ ...p, location: e.target.value })); setPage(1); }} className="input" style={{ padding: '0.25rem 0.5rem', fontSize: 'var(--font-size-xs)' }} />
+              <input placeholder="Filter..." value={filters.location} onChange={e => { setFilters(p => ({ ...p, location: e.target.value })); setPage(1); }} className="input" />
             </div>
           </div>
         </div>
