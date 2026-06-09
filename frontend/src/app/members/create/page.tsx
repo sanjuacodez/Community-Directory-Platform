@@ -64,21 +64,25 @@ export default function CreateMemberPage() {
       <h1 style={{fontSize:'var(--font-size-2xl)',fontWeight:700,marginBottom:'1.5rem'}}>Add Member</h1>
       <form onSubmit={submit}>
         <Section title="Basic Information">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Left column: Photo, Gender, Blood Group */}
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-5 items-start">
+            {/* Left: Profile Photo + Gender */}
+            <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',alignItems:'center',minWidth:140}}>
               <ImageUpload currentUrl={f.profile_image || null} onUpload={(url) => s('profile_image', url)} />
-              <div style={{marginTop:'0.75rem',display:'flex',flexDirection:'column',gap:'0.5rem'}}>
+              <div style={{width:'100%'}}>
                 <Field label="Gender" required><select value={f.gender} onChange={e => s('gender', e.target.value)} className="input" required><option value="">Select</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></Field>
-                <Field label="Blood Group"><select value={f.blood_group} onChange={e => s('blood_group', e.target.value)} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
               </div>
             </div>
-            {/* Right column: Name, DOB, Deceased */}
-            <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
-              <Field label="First Name" required><input value={f.first_name} onChange={e => s('first_name', e.target.value)} className="input" required /></Field>
-              <Field label="Last Name" required><input value={f.last_name} onChange={e => s('last_name', e.target.value)} className="input" required /></Field>
-              <Field label="Date of Birth"><input type="date" value={f.date_of_birth} onChange={e => s('date_of_birth', e.target.value)} className="input" /></Field>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', paddingTop:'0.5rem' }}>
+            {/* Right: Name, DOB, Blood, Deceased */}
+            <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',flex:1}}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Field label="First Name" required><input value={f.first_name} onChange={e => s('first_name', e.target.value)} className="input" required /></Field>
+                <Field label="Last Name" required><input value={f.last_name} onChange={e => s('last_name', e.target.value)} className="input" required /></Field>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <Field label="Date of Birth"><input type="date" value={f.date_of_birth} onChange={e => s('date_of_birth', e.target.value)} className="input" /></Field>
+                <Field label="Blood Group"><select value={f.blood_group} onChange={e => s('blood_group', e.target.value)} className="input">{BLOOD.map(b => <option key={b} value={b}>{b || 'None'}</option>)}</select></Field>
+              </div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', paddingTop:'0.25rem' }}>
                 <input type="checkbox" checked={f.is_deceased} onChange={e => s('is_deceased', e.target.checked)} style={{ width: 18, height: 18, accentColor: 'var(--color-danger)' }} />
                 <span style={{ color: f.is_deceased ? 'var(--color-danger)' : 'var(--color-text-muted)', fontWeight: f.is_deceased ? 600 : 400 }}>Mark as deceased</span>
               </label>

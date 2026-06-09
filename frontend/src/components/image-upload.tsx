@@ -70,7 +70,7 @@ export function ImageUpload({ onUpload, currentUrl, bucket = 'profiles', folder 
         onDragLeave={handleDragOut}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        className={`relative flex flex-col items-center justify-center w-32 h-32 rounded-xl border-2 border-dashed cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 ${
+        className={`relative flex flex-col items-center justify-center w-36 h-36 rounded-xl border-2 border-dashed cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-400 ${
           dragActive ? 'border-zinc-900 bg-zinc-50' : 'border-zinc-300 hover:border-zinc-400'
         } ${uploading ? 'opacity-50 pointer-events-none' : ''}`}
       >
@@ -78,10 +78,10 @@ export function ImageUpload({ onUpload, currentUrl, bucket = 'profiles', folder 
           <img src={preview} alt="Profile preview" className="w-full h-full rounded-xl object-cover" />
         ) : (
           <div className="text-center p-2">
-            <svg className="mx-auto h-6 w-6 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <svg className="mx-auto h-8 w-8 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            <p className="mt-1 text-xs text-zinc-400">Upload</p>
+            <p className="mt-1 text-xs text-zinc-400">Upload Photo</p>
           </div>
         )}
         {uploading && (
