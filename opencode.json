@@ -5,6 +5,14 @@
       "type": "remote",
       "url": "https://mcp.supabase.com/mcp?project_ref=fflgfmhliwrltyjbfguf",
       "enabled": true
+    },
+    "magic": {
+      "type": "local",
+      "command": ["npx", "-y", "@21st-dev/magic@latest"],
+      "enabled": true,
+      "environment": {
+        "API_KEY": "36724d2cba50cdc3b03ade66476aa1eee8c67c6e20c5c7d5b01ab53a52d98ebd"
+      }
     }
   }
 }
