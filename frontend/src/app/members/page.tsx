@@ -19,7 +19,7 @@ export default function MembersPage() {
   const [filters, setFilters] = useState({ communityId: '', familyId: '', search: '', bloodGroup: '', gender: '', profession: '', location: '' });
   const [page, setPage] = useState(1); const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true); const [view, setView] = useState<ViewMode>('grid');
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true);
   const [popupIndex, setPopupIndex] = useState<number | null>(null);
 
   useEffect(() => {
@@ -63,10 +63,20 @@ export default function MembersPage() {
           <input placeholder="Search by name..." value={filters.search} onChange={e => { setFilters(p => ({ ...p, search: e.target.value })); setPage(1); }} className="input" style={{ paddingLeft: '2.25rem' }} />
           <svg style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="7" cy="7" r="5.5"/><path d="M11 11l4 4"/></svg>
         </div>
-        <button onClick={() => setShowFilters(!showFilters)} className={`btn btn-sm ${showFilters ? 'btn-primary' : 'btn-outline'}`}>Filters {filterCount > 0 ? `(${filterCount})` : ''}</button>
+        <button onClick={() => setShowFilters(!showFilters)} className={`btn btn-sm ${showFilters ? 'btn-primary' : 'btn-outline'}`}>
+          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="7" x2="20" y2="7"/><circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="7" r="2.5"/></svg>
+          Filters {filterCount > 0 ? `(${filterCount})` : ''}
+        </button>
         <div style={{ display: 'flex', gap: '1px', background: 'var(--color-border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
           {([{ m: 'grid' as const, l: 'Grid' }, { m: 'list' as const, l: 'List' }]).map(t => (
-            <button key={t.m} onClick={() => setView(t.m)} style={{ padding: '0.375rem 0.75rem', fontSize: 'var(--font-size-xs)', fontWeight: 500, border: 'none', cursor: 'pointer', background: view === t.m ? 'var(--color-primary)' : 'white', color: view === t.m ? 'white' : 'var(--color-text)' }}>{t.l}</button>
+            <button key={t.m} onClick={() => setView(t.m)} style={{ padding: '0.25rem 0.625rem', fontSize: 'var(--font-size-xs)', fontWeight: 500, border: 'none', cursor: 'pointer', background: view === t.m ? 'var(--color-primary)' : 'white', color: view === t.m ? 'white' : 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+              {t.m === 'grid' ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z"/></svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+              )}
+              {t.l}
+            </button>
           ))}
         </div>
       </div>
