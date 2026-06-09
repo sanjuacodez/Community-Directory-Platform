@@ -24,8 +24,12 @@ export default function MemberProfilePage() {
   }, [user, p.id]);
 
   const loadRel = async () => {
-    const { data } = await supabase.from('member_relationships').select('*, related:members!member_relationships_related_member_id_fkey(first_name,last_name,id)').eq('member_id', p.id);
-    if (data) setM((prev: any) => ({ ...prev, relationships: data }));
+    const { data: rels } = await supabase.from('member_relationships').select('id,relationship_type,related_member_id').eq('member_id', p.id);
+    if (!rels || rels.length === 0) { setM((prev: any) => ({ ...prev, relationships: [] })); return; }
+    const ids = rels.map((r: any) => r.related_member_id);
+    const { data: related } = await supabase.from('members').select('id,first_name,last_name').in('id', ids);
+    const map = new Map((related as any[] || []).map((m: any) => [m.id, m]));
+    setM((prev: any) => ({ ...prev, relationships: rels.map((r: any) => ({ ...r, member: map.get(r.related_member_id) })) }));
   };
 
   useEffect(() => { if (m) loadRel(); }, [m?.id]);
@@ -123,7 +127,7 @@ export default function MemberProfilePage() {
               <div className="flex items-center gap-2">
                 <span className="badge capitalize">{r.relationship_type}</span>
                 <Link href={`/members/${r.related_member_id}`} style={{ fontWeight: 500, color: 'var(--color-primary)' }}>
-                  {r.related?.first_name} {r.related?.last_name}
+                  {r.member?.first_name} {r.member?.last_name}
                 </Link>
               </div>
               <button onClick={() => delRel(r.id)} className="btn btn-danger btn-sm">Remove</button>
