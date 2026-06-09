@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
@@ -15,7 +15,6 @@ export default function MembersPage() {
   const [members, setMembers] = useState<any[]>([]);
   const [communities, setCommunities] = useState<any[]>([]);
   const [families, setFamilies] = useState<any[]>([]);
-  const [relationships, setRelationships] = useState<any[]>([]);
   const [filters, setFilters] = useState({ communityId: '', familyId: '', search: '', bloodGroup: '', profession: '', location: '' });
   const [page, setPage] = useState(1); const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true); const [view, setView] = useState<ViewMode>('grid');
@@ -24,7 +23,6 @@ export default function MembersPage() {
   useEffect(() => {
     supabase.from('communities').select('id,name').then(({ data }) => setCommunities((data as any) ?? []));
     supabase.from('families').select('id,name,community_id').then(({ data }) => setFamilies((data as any) ?? []));
-    supabase.from('member_relationships').select('*').then(({ data }) => setRelationships((data as any) ?? []));
   }, []);
 
   useEffect(() => {
@@ -42,12 +40,6 @@ export default function MembersPage() {
       setMembers((data as any) ?? []); setTotal(count ?? 0); setLoading(false);
     });
   }, [filters, page]);
-
-  const treeData = useMemo(() => {
-    return members.filter(m =>
-      relationships.some(r => r.member_id === m.id || r.related_member_id === m.id)
-    );
-  }, [members, relationships]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
   const filterCount = (filters.communityId ? 1 : 0) + (filters.familyId ? 1 : 0) + (filters.bloodGroup ? 1 : 0) + (filters.profession ? 1 : 0) + (filters.location ? 1 : 0);
@@ -137,7 +129,7 @@ export default function MembersPage() {
 
       {loading && <p style={{ color: 'var(--color-text-muted)', textAlign: 'center' }}>Loading...</p>}
 
-      {!loading && view === 'tree' && <FamilyTree members={treeData} relationships={relationships} />}
+      {!loading && view === 'tree' && <FamilyTree />}
 
       {!loading && view === 'grid' && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
