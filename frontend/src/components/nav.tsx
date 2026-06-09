@@ -6,8 +6,6 @@ import { useAuth } from '@/stores/auth';
 const links = [
   { href: '/communities', label: 'Communities' },
   { href: '/families', label: 'Families' },
-  { href: '/members', label: 'Members' },
-  { href: '/directory', label: 'Directory' },
 ];
 
 export function Nav() {
