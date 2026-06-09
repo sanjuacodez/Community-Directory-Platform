@@ -4,16 +4,10 @@ import Link from 'next/link';
 import { useAuth } from '@/stores/auth';
 
 const links = [
-  { href: '/', label: 'Home' },
   { href: '/communities', label: 'Communities' },
   { href: '/families', label: 'Families' },
   { href: '/members', label: 'Members' },
   { href: '/directory', label: 'Directory' },
-  { href: '/announcements', label: 'News' },
-  { href: '/events', label: 'Events' },
-  { href: '/businesses', label: 'Business' },
-  { href: '/jobs', label: 'Jobs' },
-  { href: '/obituaries', label: 'Obituaries' },
 ];
 
 export function Nav() {
