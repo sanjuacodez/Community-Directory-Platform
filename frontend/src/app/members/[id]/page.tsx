@@ -18,10 +18,9 @@ export default function MemberProfilePage() {
   const [quickAddType, setQuickAddType] = useState('');
 
   useEffect(() => {
-    if (!user) { router.push('/login'); return; }
     supabase.from('members').select('*, family:families(*), community:communities(*)').eq('id', p.id).single().then(({ data }) => { setM(data); setL(false); });
     supabase.from('members').select('id,first_name,last_name,gender,family_id').neq('status', 'deleted').then(({ data }) => setMembers((data as any) ?? []));
-  }, [user, p.id]);
+  }, [p.id]);
 
   const loadRel = async () => {
     const { data: rels } = await supabase.from('member_relationships').select('id,relationship_type,related_member_id').eq('member_id', p.id);
@@ -71,7 +70,7 @@ export default function MemberProfilePage() {
             <p style={{ color: 'var(--color-text-muted)', margin: 0 }}>{m.profession || 'Member'} · {m.community?.name}</p>
           </div>
         </div>
-        <Link href={`/members/${m.id}/edit`} className="btn btn-outline btn-sm">Edit Profile</Link>
+        {user && <Link href={`/members/${m.id}/edit`} className="btn btn-outline btn-sm">Edit Profile</Link>}
       </div>
 
       <div className="card" style={{ marginBottom: '1.5rem' }}>
@@ -91,8 +90,8 @@ export default function MemberProfilePage() {
 
       <div className="card">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="section-title" style={{marginBottom:0}}>Family Relationships</h2>
-          {!showRelForm && (
+          <h2 className="section-title" style={{marginBottom:0}}>Family Connections</h2>
+          {user && !showRelForm && (
             <button onClick={() => setShowRelForm(true)} className="btn btn-accent btn-sm">+ Connect</button>
           )}
         </div>
